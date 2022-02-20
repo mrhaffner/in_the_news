@@ -1,0 +1,10 @@
+id,name,rss_url
+cnn,CNN,http://rss.cnn.com/rss/cnn_topstories.rss
+guardian,The Guardian,https://www.theguardian.com/us/rss
+huffpo,Huffington Post,https://chaski.huffpost.com/us/auto
+breitbart,Breitbart,https://feeds.feedburner.com/breitbart
+fox,Fox News,http://feeds.foxnews.com/foxnews/latest
+federalist,The Federalist,https://thefederalist.com/feed
+npr,NPR,https://feeds.npr.org/1002/rss.xml
+rt,RT,https://www.rt.com/rss/usa/
+cbc,CBC,https://www.cbc.ca/cmlink/rss-topstories
