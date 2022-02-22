@@ -1,5 +1,4 @@
 import csv
-import os
 import pathlib
 import requests
 from time import gmtime, strftime
@@ -30,15 +29,16 @@ def csv_to_dict(csv_file):
     return output_dict
 
 
+def scrape_websites(rss_websites, parent_dir):
+    parent_dir.mkdir(parents=True, exist_ok=True)
 
-def scrape_websites(rss_websites):
     # for each website
     for website in rss_websites:
         headers = requests.utils.default_headers()
         headers.update({
             'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
         })
-    #   rotate proxy and header
+    #   rotate proxy and header - create class that automatically rotates
         
     #   get request to url
         request = requests.get(website['rss_url'], headers)
@@ -46,7 +46,7 @@ def scrape_websites(rss_websites):
         
     #   save text to .html file - name based on website id and/or datetime?
     #   check if html or xml for error/saving?
-        with open(f"{current_time}/{website['id']}.xml", 'w') as f: # needs more sophisticated pathing
+        with open(pathlib.Path(parent_dir, f"{website['id']}.xml"), 'w') as f:
             f.write(xml)
 
 # use config file for path to save scraped websites
@@ -55,29 +55,54 @@ def scrape_websites(rss_websites):
 
 # tests?
 
+# async
 
-def is_current_folder_name(testcase, current_directory):
-    '''
-    Returns true if the testcase is the same as the name of the current working folder
-    '''
+def is_current_folder_name(testcase, current_path):
+    """
+        Returns true if the testcase is the same as the name of the current working folder
+        paramaters:
+            testcase: str
+            current_path: pathlib.Path
+        returns:
+            bool
+    """
 
-    return testcase == str(current_directory)[-len(testcase):]
+    return testcase == str(current_path)[-len(testcase):]
 
 
-def get_data_path():
+def get_path_above(folder_name):
+    """
+        Finds path to folder above current path with specificed name
+        parameters:
+            folder_name: str
+        output:
+            pathlib.Path or str (make empty path or error?)
+    """
+
     current_directory = pathlib.Path(__file__).parent.absolute()
 
-    if is_current_folder_name('in_the_news', current_directory):
-        return current_directory
-    else:
-        while not is_current_folder_name('in_the_news', current_directory) or str(current_directory) == '/' or str(current_directory) == '\\':
-            current_directory = current_directory.parent.absolute()
-            print(current_directory)
+    while str(current_directory) != '/' or str(current_directory) != '\\':
+        if is_current_folder_name(folder_name, current_directory):
+            return current_directory
 
-
+        current_directory = current_directory.parent.absolute()
+    
+    # throw error
+    return ''
+        
+            
 if __name__ == "__main__":
     csv_path = pathlib.Path(__file__).parent.joinpath('news_sites.csv')
     rss_websites = csv_to_dict(csv_path)
 
-    get_data_path()
+    # put this in its own method/class
+    app_root_path = get_path_above('in_the_news') # handle error or wrong path
+    data_path = app_root_path.joinpath('data')
+    current_time = gmtime()
+    year = strftime('%Y', current_time)
+    month = strftime('%m', current_time)
+    day = strftime('%d', current_time)
+    hour = strftime('%H', current_time)
+    path_to_save = pathlib.Path(data_path, year, month, day, hour)
 
+    scrape_websites(rss_websites, path_to_save)
