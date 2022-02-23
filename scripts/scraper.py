@@ -1,5 +1,6 @@
 import csv
 import pathlib
+import random
 import requests
 from time import gmtime, strftime
 
@@ -18,9 +19,13 @@ from time import gmtime, strftime
 
 
 def csv_to_dict(csv_file):
-    '''
-    Converts a .csv file to a dictionary
-    '''
+    """
+        Converts a .csv file to an array of dictionaries
+        input:
+            csv_file: pathlib.Path
+        output:
+            [{}] ????
+    """
 
     with open(csv_file, newline='') as f:
         reader = csv.DictReader(f)
@@ -28,17 +33,41 @@ def csv_to_dict(csv_file):
     
     return output_dict
 
+class Headers:
+    
+    def __init__(self):
+        self._headers_list = [
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', 
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36', 
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36', 
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148', 
+            'Mozilla/5.0 (Linux; Android 11; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36' 
+        ]
+        self._headers_index = random.randint(0, len(self._headers_list) - 1)
+        self.headers = None
+        self.set_new_headers()
+
+    def set_new_headers(self):
+        self.headers = requests.utils.default_headers()
+        self.headers.update({'User-Agent': self._headers_list[self._headers_index]})
+
+        self._headers_index += 1
+        if self._headers_index == len(self._headers_list):
+            self._headers_index = 0
+    
+
 
 def scrape_websites(rss_websites, parent_dir):
     parent_dir.mkdir(parents=True, exist_ok=True)
+    header_obj = Headers()
+    
 
     # for each website
     for website in rss_websites:
-        headers = requests.utils.default_headers()
-        headers.update({
-            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
-        })
     #   rotate proxy and header - create class that automatically rotates
+        headers = header_obj.headers
+        header_obj.set_new_headers()
         
     #   get request to url
         request = requests.get(website['rss_url'], headers)
@@ -56,6 +85,8 @@ def scrape_websites(rss_websites, parent_dir):
 # tests?
 
 # async
+
+# rescrape with different header / proxy if scrape fails?
 
 def is_current_folder_name(testcase, current_path):
     """
@@ -87,22 +118,26 @@ def get_path_above(folder_name):
 
         current_directory = current_directory.parent.absolute()
     
-    # throw error
+    # throw error or return empty path?
     return ''
-        
-            
-if __name__ == "__main__":
-    csv_path = pathlib.Path(__file__).parent.joinpath('news_sites.csv')
-    rss_websites = csv_to_dict(csv_path)
 
-    # put this in its own method/class
+
+def get_path_to_save():
     app_root_path = get_path_above('in_the_news') # handle error or wrong path
     data_path = app_root_path.joinpath('data')
+    # modularize time getting
     current_time = gmtime()
     year = strftime('%Y', current_time)
     month = strftime('%m', current_time)
     day = strftime('%d', current_time)
     hour = strftime('%H', current_time)
-    path_to_save = pathlib.Path(data_path, year, month, day, hour)
+    return pathlib.Path(data_path, year, month, day, hour)
+
+            
+if __name__ == "__main__":
+    csv_path = pathlib.Path(__file__).parent.joinpath('news_sites.csv')
+    rss_websites = csv_to_dict(csv_path)
+
+    path_to_save = get_path_to_save()
 
     scrape_websites(rss_websites, path_to_save)
