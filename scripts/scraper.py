@@ -4,19 +4,6 @@ import random
 import requests
 from time import gmtime, strftime
 
-# federalist returning forbidden ?
-
-# read datetime
-# current_time = strftime('%Y-%m-%d-%H-%M-%S', gmtime())
-# create folder for batch based on datetime
-# current_directory = os.getcwd() # will want different directory
-
-# traverse directory tree until you reach in_the_news
-# select data subfolder
-
-
-# os.mkdir(current_time) # if not exists + error handling
-
 
 def csv_to_dict(csv_file):
     """
@@ -33,8 +20,9 @@ def csv_to_dict(csv_file):
     
     return output_dict
 
+
 class Headers:
-    
+
     def __init__(self):
         self._headers_list = [
             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
@@ -45,48 +33,34 @@ class Headers:
             'Mozilla/5.0 (Linux; Android 11; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36' 
         ]
         self._headers_index = random.randint(0, len(self._headers_list) - 1)
-        self.headers = None
-        self.set_new_headers()
+        
+    @property
+    def headers(self):
+        self._rotate_index()
+        return self._headers_list[self._headers_index]
 
-    def set_new_headers(self):
-        self.headers = requests.utils.default_headers()
-        self.headers.update({'User-Agent': self._headers_list[self._headers_index]})
-
+    def _rotate_index(self):
         self._headers_index += 1
         if self._headers_index == len(self._headers_list):
             self._headers_index = 0
     
 
-
 def scrape_websites(rss_websites, parent_dir):
     parent_dir.mkdir(parents=True, exist_ok=True)
-    header_obj = Headers()
+    headers_obj = Headers()
     
-
-    # for each website
     for website in rss_websites:
-    #   rotate proxy and header - create class that automatically rotates
-        headers = header_obj.headers
-        header_obj.set_new_headers()
+        headers = headers_obj.headers
         
-    #   get request to url
+        # proxy + rotate proxy
+        
         request = requests.get(website['rss_url'], headers)
         xml = request.text
         
-    #   save text to .html file - name based on website id and/or datetime?
     #   check if html or xml for error/saving?
         with open(pathlib.Path(parent_dir, f"{website['id']}.xml"), 'w') as f:
             f.write(xml)
 
-# use config file for path to save scraped websites
-
-# error handling?
-
-# tests?
-
-# async
-
-# rescrape with different header / proxy if scrape fails?
 
 def is_current_folder_name(testcase, current_path):
     """
@@ -141,3 +115,13 @@ if __name__ == "__main__":
     path_to_save = get_path_to_save()
 
     scrape_websites(rss_websites, path_to_save)
+
+
+# use config file for path to save scraped websites
+# error handling?
+# tests?
+# async
+# federalist returning forbidden ?
+# rescrape with different header / proxy if scrape fails?
+# docstrings
+# inline typing
