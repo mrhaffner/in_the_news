@@ -3,16 +3,17 @@ import pathlib
 import random
 import requests
 from time import gmtime, strftime
+from typing import TypedDict
 
 
-def csv_to_dict(csv_file):
-    """
-        Converts a .csv file to an array of dictionaries
-        input:
-            csv_file: pathlib.Path
-        output:
-            [{}] ????
-    """
+class Website(TypedDict):
+    id: str
+    name: str
+    rss_url: str
+
+
+def csv_to_dict(csv_file: pathlib.Path) ->list[Website]:
+    """Converts a .csv file to an array of dictionaries"""
 
     with open(csv_file, newline='') as f:
         reader = csv.DictReader(f)
@@ -21,10 +22,10 @@ def csv_to_dict(csv_file):
     return output_dict
 
 
-class Headers:
-
-    def __init__(self):
-        self._headers_list = [
+class Headers: # could use static instead of instance? better name? UserAgent? List Rotater with a list to input?
+#doc string
+    def __init__(self) -> None:
+        self._headers_list = [ # read from file and instantiate?
             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', 
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36', 
@@ -35,17 +36,19 @@ class Headers:
         self._headers_index = random.randint(0, len(self._headers_list) - 1)
         
     @property
-    def headers(self):
+    def headers(self) -> str:
         self._rotate_index()
         return self._headers_list[self._headers_index]
 
-    def _rotate_index(self):
+    def _rotate_index(self) -> None:
         self._headers_index += 1
         if self._headers_index == len(self._headers_list):
             self._headers_index = 0
     
 
-def scrape_websites(rss_websites, parent_dir):
+def scrape_websites(rss_websites: Website, parent_dir: pathlib.Path) -> None:
+    """
+    """
     parent_dir.mkdir(parents=True, exist_ok=True)
     headers_obj = Headers()
     
@@ -62,28 +65,13 @@ def scrape_websites(rss_websites, parent_dir):
             f.write(xml)
 
 
-def is_current_folder_name(testcase, current_path):
-    """
-        Returns true if the testcase is the same as the name of the current working folder
-        paramaters:
-            testcase: str
-            current_path: pathlib.Path
-        returns:
-            bool
-    """
-
+def is_current_folder_name(testcase: str, current_path: pathlib.Path) -> bool:
+    """Returns true if the testcase is the same as the name of the current working folder"""
     return testcase == str(current_path)[-len(testcase):]
 
 
-def get_path_above(folder_name):
-    """
-        Finds path to folder above current path with specificed name
-        parameters:
-            folder_name: str
-        output:
-            pathlib.Path or str (make empty path or error?)
-    """
-
+def get_path_above(folder_name: str) -> pathlib.Path or str: # should return one type
+    """Finds path to folder above current path with specificed name"""
     current_directory = pathlib.Path(__file__).parent.absolute()
 
     while str(current_directory) != '/' or str(current_directory) != '\\':
@@ -96,7 +84,9 @@ def get_path_above(folder_name):
     return ''
 
 
-def get_path_to_save():
+def get_path_to_save() -> pathlib.Path: # should maybe take in root folder name to modularize, then rename
+    """
+    """
     app_root_path = get_path_above('in_the_news') # handle error or wrong path
     data_path = app_root_path.joinpath('data')
     # modularize time getting
@@ -124,4 +114,4 @@ if __name__ == "__main__":
 # federalist returning forbidden ?
 # rescrape with different header / proxy if scrape fails?
 # docstrings
-# inline typing
+# utilities modules...
