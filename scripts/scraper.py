@@ -1,29 +1,16 @@
-import csv
 import pathlib
-import random
 import requests
+from utilities.data_struct import RotatingList
+from utilities.files import csv_to_dict
+from utilities.pathing import get_path_above
 from time import gmtime, strftime
-from typing import TypeVar, TypedDict
+from typing import TypedDict
 
 
 class Website(TypedDict):
     id: str
     name: str
     rss_url: str
-
-
-T = TypeVar('T')
-
-
-def csv_to_dict(csv_file: pathlib.Path) ->list[Website]:
-    """Converts a .csv file to an array of dictionaries"""
-
-    with open(csv_file, newline='') as f:
-        reader = csv.DictReader(f)
-        output_dict = [row for row in reader]
-    
-    return output_dict
-    
 
 user_agents = [
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
@@ -34,21 +21,19 @@ user_agents = [
     'Mozilla/5.0 (Linux; Android 11; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36' 
 ]
 
-class RotatingList:
-#doc string
-    def __init__(self, base_list: list[T]) -> None:
-        self._base_list = base_list
-        self._index = random.randint(0, len(self._base_list) - 1)
-        
-    @property
-    def next(self) -> T:
-        self._rotate_index()
-        return self._base_list[self._index]
 
-    def _rotate_index(self) -> None:
-        self._index += 1
-        if self._index == len(self._base_list):
-            self._index = 0
+def get_path_to_save() -> pathlib.Path: # should maybe take in root folder name to modularize, then rename
+    """
+    """
+    app_root_path = get_path_above('in_the_news') # handle error or wrong path
+    data_path = app_root_path.joinpath('data')
+    # modularize time getting
+    current_time = gmtime()
+    year = strftime('%Y', current_time)
+    month = strftime('%m', current_time)
+    day = strftime('%d', current_time)
+    hour = strftime('%H', current_time) #what if hour somehow overlaps? and something so no overwrite? pass hour in from airflow?
+    return pathlib.Path(data_path, year, month, day, hour)
 
 
 def scrape_websites(rss_websites: Website, parent_dir: pathlib.Path) -> None:
@@ -68,39 +53,6 @@ def scrape_websites(rss_websites: Website, parent_dir: pathlib.Path) -> None:
     #   check if html or xml for error/saving?
         with open(pathlib.Path(parent_dir, f"{website['id']}.xml"), 'w') as f:
             f.write(xml)
-
-
-def is_current_folder_name(testcase: str, current_path: pathlib.Path) -> bool:
-    """Returns true if the testcase is the same as the name of the current working folder"""
-    return testcase == str(current_path)[-len(testcase):]
-
-
-def get_path_above(folder_name: str) -> pathlib.Path or str: # should return one type
-    """Finds path to folder above current path with specificed name"""
-    current_directory = pathlib.Path(__file__).parent.absolute()
-
-    while str(current_directory) != '/' or str(current_directory) != '\\':
-        if is_current_folder_name(folder_name, current_directory):
-            return current_directory
-
-        current_directory = current_directory.parent.absolute()
-    
-    # throw error or return empty path?
-    return ''
-
-
-def get_path_to_save() -> pathlib.Path: # should maybe take in root folder name to modularize, then rename
-    """
-    """
-    app_root_path = get_path_above('in_the_news') # handle error or wrong path
-    data_path = app_root_path.joinpath('data')
-    # modularize time getting
-    current_time = gmtime()
-    year = strftime('%Y', current_time)
-    month = strftime('%m', current_time)
-    day = strftime('%d', current_time)
-    hour = strftime('%H', current_time) #what if hour somehow overlaps? and something so no overwrite? pass hour in from airflow?
-    return pathlib.Path(data_path, year, month, day, hour)
 
             
 if __name__ == "__main__":
