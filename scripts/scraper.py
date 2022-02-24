@@ -3,13 +3,16 @@ import pathlib
 import random
 import requests
 from time import gmtime, strftime
-from typing import TypedDict
+from typing import TypeVar, TypedDict
 
 
 class Website(TypedDict):
     id: str
     name: str
     rss_url: str
+
+
+T = TypeVar('T')
 
 
 def csv_to_dict(csv_file: pathlib.Path) ->list[Website]:
@@ -20,44 +23,46 @@ def csv_to_dict(csv_file: pathlib.Path) ->list[Website]:
         output_dict = [row for row in reader]
     
     return output_dict
+    
 
+user_agents = [
+    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', 
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36', 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36', 
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148', 
+    'Mozilla/5.0 (Linux; Android 11; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36' 
+]
 
-class Headers: # could use static instead of instance? better name? UserAgent? List Rotater with a list to input?
+class RotatingList:
 #doc string
-    def __init__(self) -> None:
-        self._headers_list = [ # read from file and instantiate?
-            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36', 
-            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36', 
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36', 
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148', 
-            'Mozilla/5.0 (Linux; Android 11; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36' 
-        ]
-        self._headers_index = random.randint(0, len(self._headers_list) - 1)
+    def __init__(self, base_list: list[T]) -> None:
+        self._base_list = base_list
+        self._index = random.randint(0, len(self._base_list) - 1)
         
     @property
-    def headers(self) -> str:
+    def next(self) -> T:
         self._rotate_index()
-        return self._headers_list[self._headers_index]
+        return self._base_list[self._index]
 
     def _rotate_index(self) -> None:
-        self._headers_index += 1
-        if self._headers_index == len(self._headers_list):
-            self._headers_index = 0
-    
+        self._index += 1
+        if self._index == len(self._base_list):
+            self._index = 0
+
 
 def scrape_websites(rss_websites: Website, parent_dir: pathlib.Path) -> None:
     """
     """
     parent_dir.mkdir(parents=True, exist_ok=True)
-    headers_obj = Headers()
+    headers_obj = RotatingList(user_agents) # rename
     
     for website in rss_websites:
-        headers = headers_obj.headers
+        headers = headers_obj.next # rename
         
         # proxy + rotate proxy
         
-        request = requests.get(website['rss_url'], headers)
+        request = requests.get(website['rss_url'], headers) # thought i needed to add {user-agent: ...} ????
         xml = request.text
         
     #   check if html or xml for error/saving?
@@ -94,7 +99,7 @@ def get_path_to_save() -> pathlib.Path: # should maybe take in root folder name 
     year = strftime('%Y', current_time)
     month = strftime('%m', current_time)
     day = strftime('%d', current_time)
-    hour = strftime('%H', current_time)
+    hour = strftime('%H', current_time) #what if hour somehow overlaps? and something so no overwrite? pass hour in from airflow?
     return pathlib.Path(data_path, year, month, day, hour)
 
             
