@@ -22,7 +22,7 @@ def get_path_to_save(base_dir_name: str, data_dir_name: str) -> pathlib.Path:
 
         get_path_to_save('in_the_news', 'data')
 
-        outputs Path:
+        Outputs Path:
         c/in_the_news/data/2022/02/22/02
     """
     #update docstring format?
@@ -31,10 +31,15 @@ def get_path_to_save(base_dir_name: str, data_dir_name: str) -> pathlib.Path:
     return add_datetime_to_path(data_path)
 
 
-def scrape_websites(rss_websites: Website, parent_dir: pathlib.Path) -> None:
+def scrape_websites_to_xml(rss_websites: Website, parent_dir: pathlib.Path) -> None:
     """
+    Scrapes a list of rss_websites, saves each website to an xml file in parent_dir
+
+    Throws IOError???
     """
+    # move set up to another function or maybe created a scraped class to handle setup?
     json_path = pathlib.Path(__file__).parent.joinpath('config/user_agents.json')
+    # needs error handling
     with open(json_path) as f:
         user_agents = json.load(f)
 
@@ -60,7 +65,7 @@ if __name__ == "__main__":
 
     path_to_save = get_path_to_save('in_the_news', 'data')
 
-    scrape_websites(rss_websites, path_to_save)
+    scrape_websites_to_xml(rss_websites, path_to_save)
 
 
 # use config file for path to save scraped websites
