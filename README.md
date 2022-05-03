@@ -8,7 +8,8 @@ create virtual environment in /venv
 Activate virtual environment:
 source venv/bin/activate
 
-Install from requirements.txt
+Install packages:
+pip install -r requirements.txt
 
 Run the scraper:
-python3 scripts/scraper.py
+python scripts/scraper.py
