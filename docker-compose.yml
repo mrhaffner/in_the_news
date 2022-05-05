@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  inthenews:
-    image: inthenews
-    build:
-      context: .
-      dockerfile: ./Dockerfile
