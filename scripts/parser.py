@@ -1,3 +1,4 @@
+import pathlib
 from bs4 import BeautifulSoup
 
 # takes in a datetime
@@ -9,19 +10,58 @@ from bs4 import BeautifulSoup
 class Article:
 
     def __init__(self, article_soup):
-        self.title = article_soup.title.get_text()
-        self.pub_date = article_soup.pubDate.get_text()
-        self.url = article_soup.link
-        self.article = self._get_author(article_soup)
+        self.soup = article_soup
+        self.title = self._create_title()
+        self.pub_date = self._create_pub_date()
+        self.url = self._create_url()
+        self.author = self._create_author()
+
+
+    def _create_title(self):
+        title = ''
+
+        titles = self.soup.find_all('title')
+        if len(titles) > 0:
+            title = self.soup.title.get_text()
+
+        return title.strip()
+
+
+    def _create_pub_date(self):
+        pub_date = ''
+
+        pub_dates = self.soup.find_all('pubDate')
+        if len(pub_dates) > 0:
+            pub_date = self.soup.pubDate.get_text()
+
+        #optionally add date if blank?
+
+        return pub_date.strip()
     
-    @staticmethod
-    def _get_author(soup):
-        author = soup.creator.get_text()
 
-        if author == '':
-            author = soup.author.get_text()
+    def _create_url(self):
+        url = ''
 
-        return author
+        urls = self.soup.find_all('link')
+        if len(urls) > 0:
+            url = self.soup.link.get_text()
+
+        return url.strip()
+
+
+    def _create_author(self):
+        author = ''
+
+        creators = self.soup.find_all('creator')
+        if len(creators) > 0:
+            author = self.soup.creator.get_text()
+
+        authors = self.soup.find_all('author')
+        if author == '' and len(authors) > 0:
+            author = self.soup.author.get_text()
+
+        return author.strip()
+
 
 
 # throws i/o error
@@ -278,6 +318,9 @@ test = '''
 if __name__ == "__main__":
     soup = BeautifulSoup(test, 'xml')
     parsed = parse_soup(soup)
-    print(parsed[0].__dict__)
+    #print(parsed[0].__dict__)
    #save_xml_date(datetime?) 
    # date input from airflow?
+    #with open(pathlib.Path(__file__).parent.joinpath('tests/data/2022/05/03/18/cnn.xml')) as f:
+        #cnn_soup = BeautifulSoup(f, 'xml')
+    #print(cnn_soup.find('item'))
