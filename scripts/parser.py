@@ -26,17 +26,31 @@ def parse_soup(soup):
     for item in items:
         title = item.title.get_text()
         pubDate = item.pubDate.get_text()
-        link = item.link.get_text()
+        url = item.link.get_text()
+        author = get_author(item)
+        # id is hashed url
         article = {
             'title': title,
             'pubDate': pubDate,
-            'link': link,
+            'url': url,
+            'author': author,
         }
 
         articles.append(article)
 
     return articles
 
+
+def get_author(item):
+    author = item.creator.get_text()
+
+    if author == '':
+        author = item.author.get_text()
+
+    return author
+# dc:creator
+# author
+# 
 
 test = '''
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
