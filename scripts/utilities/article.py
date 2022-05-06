@@ -27,7 +27,7 @@ def _create_pub_date(article_soup):
         pub_date = article_soup.pubDate.get_text()
 
     #optionally add date if blank?
-    # convert to some datatime?
+    # convert to some datatime standard?
 
     return pub_date.strip()
     

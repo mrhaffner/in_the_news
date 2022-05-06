@@ -21,6 +21,7 @@ def parse_soup(soup, publisher):
 
     for item in items:
         # article = Article(item)
+        print(item)
         article = article_factory(item, publisher)
         articles.append(article)
 
@@ -44,8 +45,8 @@ if __name__ == "__main__":
         npr_soup = BeautifulSoup(f, 'xml')
 
     parsed_soup = parse_soup(npr_soup, 'npr')
-    for article in parsed_soup:
-        print(article.__dict__)
+    #for article in parsed_soup:
+        #print(article)
 
 
     #print(parsed[0].__dict__)
