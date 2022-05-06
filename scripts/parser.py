@@ -6,16 +6,23 @@ from bs4 import BeautifulSoup
 # saves title, url, pubdate, and author? for each article in feed to db/or file? with specified datetime/website
 # key can be url? or title+website?
 
+class Article:
 
-# def save_xml_date(datetime)
-    # convert datetime to path
-    # loop over files in path
-        # parse_xml(filepath)
-        # save_to_whatver
+    def __init__(self, article_soup):
+        self.title = article_soup.title.get_text()
+        self.pub_date = article_soup.pubDate.get_text()
+        self.url = article_soup.link
+        self.article = self._get_author(article_soup)
+    
+    @staticmethod
+    def _get_author(soup):
+        author = soup.creator.get_text()
 
-#def soup_from_filepath(file_path):
-    #with open(file_path) as fp:
-        #soup = BeautifulSoup(fp, 'lxml')
+        if author == '':
+            author = soup.author.get_text()
+
+        return author
+
 
 # throws i/o error
 def parse_soup(soup):
@@ -24,18 +31,7 @@ def parse_soup(soup):
     articles = []
 
     for item in items:
-        title = item.title.get_text()
-        pubDate = item.pubDate.get_text()
-        url = item.link.get_text()
-        author = get_author(item)
-        # id is hashed url
-        article = {
-            'title': title,
-            'pubDate': pubDate,
-            'url': url,
-            'author': author,
-        }
-
+        article = Article(item)
         articles.append(article)
 
     return articles
@@ -50,8 +46,16 @@ def get_author(item):
     return author
 # dc:creator
 # author
-# 
 
+# def save_xml_date(datetime)
+    # convert datetime to path
+    # loop over files in path
+        # parse_xml(filepath)
+        # save_to_whatver
+
+#def soup_from_filepath(file_path):
+    #with open(file_path) as fp:
+        #soup = BeautifulSoup(fp, 'lxml')
 test = '''
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -274,6 +278,6 @@ test = '''
 if __name__ == "__main__":
     soup = BeautifulSoup(test, 'xml')
     parsed = parse_soup(soup)
-    print(parsed[0])
+    print(parsed[0].__dict__)
    #save_xml_date(datetime?) 
    # date input from airflow?
