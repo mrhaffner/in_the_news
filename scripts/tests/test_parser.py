@@ -3,6 +3,7 @@ import pytest
 from bs4 import BeautifulSoup
 from scripts.parser import Article
 
+
 with open(pathlib.Path(__file__).parent.joinpath('data/2022/05/03/18/breitbart.xml')) as f:
     breitbart_soup = BeautifulSoup(f, 'xml')
 
