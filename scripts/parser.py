@@ -1,4 +1,3 @@
-from ast import parse
 import pathlib
 from bs4 import BeautifulSoup
 
@@ -12,46 +11,30 @@ from utilities.article import article_factory
 
 # function that creates Article data class from 
 
+def save_parsed_articles(articles):
+    print(articles)
 
 # throws i/o error
-def parse_soup(soup, publisher):
+def parse_articles_from_soup(soup, publisher):
     items = soup.find_all('item')
 
     articles = []
 
     for item in items:
-        # article = Article(item)
-        print(item)
         article = article_factory(item, publisher)
         articles.append(article)
 
     return articles
 
 
-
-# def save_xml_date(datetime)
-    # convert datetime to path
-    # loop over files in path
-        # parse_xml(filepath)
-        # save_to_whatver
-
-#def soup_from_filepath(file_path):
-    #with open(file_path) as fp:
-        #soup = BeautifulSoup(fp, 'lxml')
+def parse_scraped_data(directory):
+    for file in directory:
+        if str(file).endswith('xml'):
+            with open(file) as f:
+                soup = BeautifulSoup(f, 'xml')
+                articles = parse_articles_from_soup(soup, file.stem)
+                save_parsed_articles(articles)
 
 
 if __name__ == "__main__":
-    with open(pathlib.Path(__file__).parent.joinpath('tests/data/2022/05/03/18/breitbart.xml')) as f:
-        npr_soup = BeautifulSoup(f, 'xml')
-
-    parsed_soup = parse_soup(npr_soup, 'npr')
-    #for article in parsed_soup:
-        #print(article)
-
-
-    #print(parsed[0].__dict__)
-   #save_xml_date(datetime?) 
-   # date input from airflow?
-    #with open(pathlib.Path(__file__).parent.joinpath('tests/data/2022/05/03/18/cnn.xml')) as f:
-        #cnn_soup = BeautifulSoup(f, 'xml')
-    #print(cnn_soup.find('item'))
+    parse_scraped_data(pathlib.Path(__file__).parent.parent.joinpath('data/2022/05/06/21').glob('*'))
