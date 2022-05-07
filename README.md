@@ -11,5 +11,11 @@ source venv/bin/activate
 Install packages:
 pip install -r requirements.txt
 
+Run the tests:
+python -m pytest -q scripts/tests/test_parser.py
+
 Run the scraper:
 python scripts/scraper.py
+
+Run the parser:
+python scripts/parser.py
