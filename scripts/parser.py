@@ -14,7 +14,7 @@ from utilities.pathing import get_path_with_current_datetime
 
 # throws i/o error
 def save_parsed_articles(articles, publisher):
-    # perhaps this should use a different method that gets the most recently saved date path
+    # maybe get the path to save from based on input date folders from scraped folder
     dir_to_save = get_path_with_current_datetime('in_the_news', 'data/parsed')
     dir_to_save.mkdir(parents=True, exist_ok=True)
     df = pd.DataFrame([article for article in articles])
@@ -45,4 +45,6 @@ def parse_scraped_data(directory):
 
 
 if __name__ == "__main__":
-    parse_scraped_data(pathlib.Path(__file__).parent.parent.joinpath('data/scraped/2022/05/07/17').glob('*'))
+    # this should find most recently scraped folder or generate a path based on datetime input
+    dir_to_parse = pathlib.Path(__file__).parent.parent.joinpath('data/scraped/2022/05/07/17')
+    parse_scraped_data(dir_to_parse.glob('*'))
