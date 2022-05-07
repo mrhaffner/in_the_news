@@ -40,6 +40,23 @@ def get_path_above(folder_name: str) -> pathlib.Path:
     # return ''
 
 
+def get_path_with_current_datetime(base_dir_name: str, data_dir_name: str) -> pathlib.Path:
+    """
+        Finds the base path, adds a sub path, then adds a datetime based series of subpaths
+
+        Example called path below @ 2022-02-22 02:22:22 with 'in_the_news' in path c/
+
+        get_path_with_current_datetime('in_the_news', 'data/scraped')
+
+        Outputs Path:
+        c/in_the_news/data/scraped/2022/02/22/02
+    """
+    #update docstring format?
+    app_root_path = get_path_above(base_dir_name) # handle error or wrong path
+    data_path = app_root_path.joinpath(data_dir_name)
+    return add_datetime_to_path(data_path)
+
+
 def is_current_folder_name(testcase: str, current_path: pathlib.Path) -> bool:
     """Returns true if the testcase is the same as the name of the current working folder"""
 

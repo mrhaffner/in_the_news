@@ -3,8 +3,7 @@ import pathlib
 import requests
 from utilities.data_struct import RotatingList
 from utilities.files import csv_to_dict
-from utilities.pathing import get_path_above
-from utilities.pathing import add_datetime_to_path
+from utilities.pathing import get_path_with_current_datetime
 from typing import TypedDict
 
 
@@ -12,23 +11,6 @@ class Website(TypedDict):
     id: str
     name: str
     rss_url: str
-
-
-def get_path_to_save(base_dir_name: str, data_dir_name: str) -> pathlib.Path:
-    """
-        Finds the base path, adds a sub path, then adds a datetime based series of subpaths
-
-        Example called path below @ 2022-02-22 02:22:22 with 'in_the_news' in path c/
-
-        get_path_to_save('in_the_news', 'data/scraped')
-
-        Outputs Path:
-        c/in_the_news/data/scraped/2022/02/22/02
-    """
-    #update docstring format?
-    app_root_path = get_path_above(base_dir_name) # handle error or wrong path
-    data_path = app_root_path.joinpath(data_dir_name)
-    return add_datetime_to_path(data_path)
 
 
 def scrape_websites_to_xml(rss_websites: Website, parent_dir: pathlib.Path) -> None:
@@ -63,7 +45,7 @@ if __name__ == "__main__":
     csv_path = pathlib.Path(__file__).parent.joinpath('config/news_sites.csv')
     rss_websites = csv_to_dict(csv_path)
 
-    path_to_save = get_path_to_save('in_the_news', 'data/scraped')
+    path_to_save = get_path_with_current_datetime('in_the_news', 'data/scraped')
 
     scrape_websites_to_xml(rss_websites, path_to_save)
 
