@@ -1,7 +1,8 @@
+import pandas as pd
 import pathlib
 from bs4 import BeautifulSoup
-
 from utilities.article import article_factory
+from utilities.pathing import get_path_with_current_datetime
 
 # takes in a datetime
 # finds the appropriate folder at that datetime
@@ -11,8 +12,14 @@ from utilities.article import article_factory
 
 # function that creates Article data class from 
 
-def save_parsed_articles(articles):
-    print(articles)
+# throws i/o error
+def save_parsed_articles(articles, publisher):
+    # perhaps this should use a different method that gets the most recently saved date path
+    dir_to_save = get_path_with_current_datetime('in_the_news', 'data/parsed')
+    dir_to_save.mkdir(parents=True, exist_ok=True)
+    df = pd.DataFrame([article for article in articles])
+    df.to_parquet(pathlib.Path.joinpath(dir_to_save, publisher + '.parquet'))
+
 
 # throws i/o error
 def parse_articles_from_soup(soup, publisher):
@@ -27,14 +34,15 @@ def parse_articles_from_soup(soup, publisher):
     return articles
 
 
+# throws i/o error
 def parse_scraped_data(directory):
     for file in directory:
         if str(file).endswith('xml'):
             with open(file) as f:
                 soup = BeautifulSoup(f, 'xml')
                 articles = parse_articles_from_soup(soup, file.stem)
-                save_parsed_articles(articles)
+                save_parsed_articles(articles, file.stem)
 
 
 if __name__ == "__main__":
-    parse_scraped_data(pathlib.Path(__file__).parent.parent.joinpath('data/2022/05/06/21').glob('*'))
+    parse_scraped_data(pathlib.Path(__file__).parent.parent.joinpath('data/scraped/2022/05/07/17').glob('*'))
