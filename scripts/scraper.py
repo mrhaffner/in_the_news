@@ -20,10 +20,10 @@ def get_path_to_save(base_dir_name: str, data_dir_name: str) -> pathlib.Path:
 
         Example called path below @ 2022-02-22 02:22:22 with 'in_the_news' in path c/
 
-        get_path_to_save('in_the_news', 'data')
+        get_path_to_save('in_the_news', 'data/scraped')
 
         Outputs Path:
-        c/in_the_news/data/2022/02/22/02
+        c/in_the_news/data/scraped/2022/02/22/02
     """
     #update docstring format?
     app_root_path = get_path_above(base_dir_name) # handle error or wrong path
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     csv_path = pathlib.Path(__file__).parent.joinpath('config/news_sites.csv')
     rss_websites = csv_to_dict(csv_path)
 
-    path_to_save = get_path_to_save('in_the_news', 'data')
+    path_to_save = get_path_to_save('in_the_news', 'data/scraped')
 
     scrape_websites_to_xml(rss_websites, path_to_save)
 
