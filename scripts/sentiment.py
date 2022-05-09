@@ -4,11 +4,6 @@ import sqlite3
 from pathlib import Path
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-# create df from parquet file
-# use textblob on description of df to create polarity colum
-# get mean polarity of polarity column
-# save that polarity to somewhere
-
 
 def classify_leaning(publisher):
     csv_path = Path(__file__).parent.joinpath('config/news_sites.csv')
@@ -26,9 +21,29 @@ def get_sentiment(text):
     return sia.polarity_scores(text)['compound']
 
 
+def create_mean_df(articles_df):
+    total_mean_df = articles_df['sentiment'].mean()
+    leaning_mean_df = articles_df.groupby('leaning').mean()
+
+    sent_data = {'datetime': [datetime.datetime.now()], 'left_mean_sentiment': [leaning_mean_df.loc['left']['sentiment']], 'right_mean_sentiment': [leaning_mean_df.loc['right']['sentiment']], 'all_mean_sentiment': [total_mean_df]}
+    sentiment_df = pd.DataFrame(data=sent_data)
+    sentiment_df.set_index('datetime', inplace = True)
+    return sentiment_df
+
+
+def classify_hourly_sentiment(dir_to_parse):
+    articles_df = pd.read_parquet(dir_to_parse, engine="pyarrow")
+    articles_df['sentiment'] = articles_df['title'].apply(get_sentiment)
+    articles_df['leaning'] = articles_df['publisher'].apply(classify_leaning)
+
+    sentiment_df = create_mean_df(articles_df)
+    return sentiment_df
+
+
 if __name__ == "__main__":
     conn = sqlite3.connect('test.db')
     cur = conn.cursor()
+
     cur.execute('''
         CREATE TABLE IF NOT EXISTS Sentiment
         (datetime TEXT PRIMARY KEY NOT NULL,
@@ -38,26 +53,10 @@ if __name__ == "__main__":
     ''')
 
     path_to_parquet = Path(__file__).parent.parent.joinpath('data/parsed/2022/05/08/22')
-    df = pd.read_parquet(path_to_parquet, engine="pyarrow")
-    df['sentiment'] = df['title'].apply(get_sentiment)
-
-    df['leaning'] = df['publisher'].apply(classify_leaning)
-    
-    df3 = df['sentiment'].mean()
-    print(df3)
-
-    df4 = df.groupby('leaning').mean()
-
-    d = {'datetime': [datetime.datetime.now()], 'left_mean_sentiment': [df4.loc['left']['sentiment']], 'right_mean_sentiment': [df4.loc['right']['sentiment']], 'all_mean_sentiment': [df3]}
-    df = pd.DataFrame(data=d)
-    df.set_index('datetime', inplace = True)
-    print(df)
+    df = classify_hourly_sentiment(path_to_parquet)
     df.to_sql(name='Sentiment', con=conn, if_exists='append')
-    conn.commit()
-    sql_df = pd.DataFrame(cur.fetchall(), columns = ['datetime', 'left_mean_sentiment', 'right_mean_sentiment', 'all_mean_sentiment'])
-    print(sql_df)
 
-  
+    conn.commit()
     conn.close()
     #percent negative articles
     #percent positive articles
