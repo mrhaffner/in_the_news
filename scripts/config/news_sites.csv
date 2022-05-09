@@ -1,10 +1,11 @@
-id,name,rss_url
-cnn,CNN,http://rss.cnn.com/rss/cnn_topstories.rss
-guardian,The Guardian,https://www.theguardian.com/us/rss
-huffpo,Huffington Post,https://chaski.huffpost.com/us/auto
-npr,NPR,https://feeds.npr.org/1002/rss.xml
-cbc,CBC,https://www.cbc.ca/cmlink/rss-topstories
-breitbart,Breitbart,https://feeds.feedburner.com/breitbart
-fox,Fox News,http://feeds.foxnews.com/foxnews/latest
-freebe,Washington Free Beacon,https://freebeacon.com/feed/
-pundit,The Gateway Pundit,https://www.thegatewaypundit.com/feed/
+id,name,rss_url,leaning
+cnn,CNN,http://rss.cnn.com/rss/cnn_topstories.rss,left
+guardian,The Guardian,https://www.theguardian.com/us/rss,left
+huffpo,Huffington Post,https://chaski.huffpost.com/us/auto,left
+npr,NPR,https://feeds.npr.org/1002/rss.xml,left
+nytimes,The New York Times,https://rss.nytimes.com/services/xml/rss/nyt/US.xml,left
+breitbart,Breitbart,https://feeds.feedburner.com/breitbart,right
+fox,Fox News,http://feeds.foxnews.com/foxnews/latest,right
+freebe,Washington Free Beacon,https://freebeacon.com/feed/,right
+pundit,The Gateway Pundit,https://www.thegatewaypundit.com/feed/,right
+wtimes,The Washington Times,https://www.washingtontimes.com/rss/headlines/news/,right

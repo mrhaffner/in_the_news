@@ -4,3 +4,5 @@ pandas
 pyarrow
 pytest
 requests
+sqlite3
+vaderSentiment
