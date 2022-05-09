@@ -19,3 +19,6 @@ python scripts/scraper.py
 
 Run the parser:
 python scripts/parser.py
+
+Run the sentiment classifier:
+python scripts/sentiment.py
