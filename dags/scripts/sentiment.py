@@ -80,7 +80,7 @@ def _create_mean_df(articles_df: pd.DataFrame) -> pd.DataFrame:
     total_mean_df = articles_df['sentiment'].mean()
     leaning_mean_df = articles_df.groupby('leaning').mean()
 
-    sent_data = {'datetime': [datetime.datetime.now()], 'left_mean_sentiment': [leaning_mean_df.loc['left']['sentiment']], 'right_mean_sentiment': [leaning_mean_df.loc['right']['sentiment']], 'all_mean_sentiment': [total_mean_df]}
+    sent_data = {'datetime': [datetime.datetime.utcnow()], 'left_mean_sentiment': [leaning_mean_df.loc['left']['sentiment']], 'right_mean_sentiment': [leaning_mean_df.loc['right']['sentiment']], 'all_mean_sentiment': [total_mean_df]}
     sentiment_df = pd.DataFrame(data=sent_data)
     sentiment_df.set_index('datetime', inplace = True)
     return sentiment_df
@@ -104,7 +104,7 @@ def sentimentizer():
     #sentiment_df.to_sql(name='Sentiment', con=conn, if_exists='append')
     sqlite_hook = SqliteHook(sqlite_conn_id='news_db')
     
-    rows = [(str(datetime.datetime.now()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], articles_df['sentiment'].mean())]
+    rows = [(str(datetime.datetime.utcnow()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], articles_df['sentiment'].mean())]
 
     target_fields = ['datetime', 'left_mean_sentiment', 'right_mean_sentiment', 'all_mean_sentiment']
 
