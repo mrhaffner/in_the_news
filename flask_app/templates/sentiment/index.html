@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block header %}
+<h1>Media Moodometer</h1>
+{% endblock %} {% block content %}
+<div>
+  <div>
+    <h2>Current Overall Mood Score:</h2>
+    <p>{{ sentiment['all_mean_sentiment'] }}</p>
+  </div>
+  <div>
+    <h2>Current Left Leaning Mood Score:</h2>
+    <p>{{ sentiment['left_mean_sentiment'] }}</p>
+  </div>
+  <div>
+    <h2>Current Right Leaning Mood Score:</h2>
+    <p>{{ sentiment['right_mean_sentiment'] }}</p>
+  </div>
+</div>
+{% endblock %}

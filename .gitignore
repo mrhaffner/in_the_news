@@ -2,4 +2,15 @@
 venv
 data
 __pycache__
+
 news.db
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
