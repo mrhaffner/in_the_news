@@ -1,9 +1,10 @@
 import json
 import pathlib
 import requests
-from utilities.data_struct import RotatingList
-from utilities.files import csv_to_dict
-from utilities.pathing import get_path_with_current_datetime
+from scripts.utilities.data_struct import RotatingList
+from scripts.utilities.files import csv_to_dict
+from airflow.models import Variable
+from scripts.utilities.pathing import add_datetime_to_path
 from typing import TypedDict
 
 
@@ -13,7 +14,7 @@ class Website(TypedDict):
     rss_url: str
 
 
-def scrape_websites_to_xml(rss_websites: Website, parent_dir: pathlib.Path) -> None:
+def _scrape_websites_to_xml(rss_websites: Website, parent_dir: pathlib.Path) -> None:
     """
     Scrapes a list of rss_websites, saves each website to an xml file in parent_dir
 
@@ -41,13 +42,16 @@ def scrape_websites_to_xml(rss_websites: Website, parent_dir: pathlib.Path) -> N
             f.write(xml)
 
             
-if __name__ == "__main__":
+def scraper():
     csv_path = pathlib.Path(__file__).parent.joinpath('config/news_sites.csv')
     rss_websites = csv_to_dict(csv_path)
 
-    path_to_save = get_path_with_current_datetime('in_the_news', 'data/scraped')
+    parsed_dir_root = pathlib.Path(Variable.get('base_dir')).joinpath('data/scraped')
+    path_to_save = add_datetime_to_path(parsed_dir_root, Variable.get('current_time'))
 
-    scrape_websites_to_xml(rss_websites, path_to_save)
+    #path_to_save = get_path_with_current_datetime('in_the_news', 'data/scraped')
+
+    _scrape_websites_to_xml(rss_websites, path_to_save)
 
 
 # use config file for path to save scraped websites

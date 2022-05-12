@@ -2,12 +2,13 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from pathlib import Path
 from typing import List
-from utilities.article import Article, article_factory
-from utilities.pathing import get_path_with_current_datetime
+from airflow.models import Variable
+from scripts.utilities.article import Article, article_factory
+from scripts.utilities.pathing import add_datetime_to_path
 
 
 # throws i/o error
-def save_parsed_articles(articles: List[Article], publisher: str) -> None:
+def _save_parsed_articles(articles: List[Article], publisher: str) -> None:
     """
         Saves an array of articles to a parquet file
 
@@ -20,7 +21,9 @@ def save_parsed_articles(articles: List[Article], publisher: str) -> None:
         /year/day/month/hour/ comes from when the current time, which is when the article was scraped
     """
     # maybe get the path to save from based on input date folders from scraped folder
-    dir_to_save = get_path_with_current_datetime('in_the_news', 'data/parsed')
+    scraped_dir_root = Path(Variable.get('base_dir')).joinpath('data/parsed')
+    dir_to_save = add_datetime_to_path(scraped_dir_root, Variable.get('current_time'))
+    #dir_to_save = get_path_with_current_datetime('in_the_news', 'data/parsed')
     dir_to_save.mkdir(parents=True, exist_ok=True)
     # pandas may be unneccesary, might be better to directly use pyarrow
     df = pd.DataFrame([article for article in articles])
@@ -28,7 +31,7 @@ def save_parsed_articles(articles: List[Article], publisher: str) -> None:
 
 
 # throws i/o error
-def parse_articles_from_soup(soup: BeautifulSoup, publisher) -> List[Article]:
+def _parse_articles_from_soup(soup: BeautifulSoup, publisher) -> List[Article]:
     """
         Parses all articles from an RSS feeds into a list of Article objects and outputs that list
 
@@ -46,20 +49,18 @@ def parse_articles_from_soup(soup: BeautifulSoup, publisher) -> List[Article]:
 
 
 # throws i/o error
-def parse_scraped_data(directory: Path) -> None:
+def _parse_scraped_data(directory: Path) -> None:
     """Parses all .xml files in a given directory and saves them to a seperate directory as .parquet files"""
     for file in directory:
         if str(file).endswith('xml'):
             with open(file) as f:
                 soup = BeautifulSoup(f, 'xml')
-                articles = parse_articles_from_soup(soup, file.stem)
-                save_parsed_articles(articles, file.stem)
+                articles = _parse_articles_from_soup(soup, file.stem)
+                _save_parsed_articles(articles, file.stem)
 
 
-if __name__ == "__main__":
-    # this should find most recently scraped folder or generate a path based on datetime input
-    dir_to_parse = Path(__file__).parent.parent.joinpath('data/scraped/2022/05/08/22')
-    parse_scraped_data(dir_to_parse.glob('*'))
-
-
-    # parse 
+def parser():
+    scraped_dir_root = Path(Variable.get('base_dir')).joinpath('data/scraped')
+    dir_to_parse = add_datetime_to_path(scraped_dir_root, Variable.get('current_time'))
+    # dir_to_parse = Path(__file__).parent.parent.joinpath('data/scraped/2022/05/08/22') ### change this
+    _parse_scraped_data(dir_to_parse.glob('*'))

@@ -1,8 +1,9 @@
 import pathlib
+from dateutil import parser
 from time import gmtime, strftime
 
-
-def add_datetime_to_path(base_path: pathlib.Path) -> pathlib.Path:
+# update
+def add_datetime_to_path(base_path: pathlib.Path, datetime: str) -> pathlib.Path:
     """
         Joins subdirectories based on current datetime to basepath.
 
@@ -10,12 +11,11 @@ def add_datetime_to_path(base_path: pathlib.Path) -> pathlib.Path:
 
         base_path/year/month/day/hour
     """
-
-    current_time = gmtime()
-    year = strftime('%Y', current_time)
-    month = strftime('%m', current_time)
-    day = strftime('%d', current_time)
-    hour = strftime('%H', current_time) #what if hour somehow overlaps? and something so no overwrite? pass hour in from airflow?
+    dt = parser.parse(datetime)
+    year = dt.strftime('%Y')
+    month = dt.strftime('%m')
+    day = dt.strftime('%d')
+    hour = dt.strftime('%H') #what if hour somehow overlaps? and something so no overwrite? pass hour in from airflow?
     
     return pathlib.Path(base_path, year, month, day, hour)
 
