@@ -102,7 +102,7 @@ def sentimentizer():
 
     #print(sentiment_df)
     #sentiment_df.to_sql(name='Sentiment', con=conn, if_exists='append')
-    sqlite_hook = SqliteHook(sqlite_conn_id='news')
+    sqlite_hook = SqliteHook(sqlite_conn_id='news_db')
     
     rows = [(str(datetime.datetime.now()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], articles_df['sentiment'].mean())]
 

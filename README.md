@@ -38,6 +38,12 @@ In airflow webbrowser, go to Admin tab then connections
 Add new connections name = news, connection type = sqlite,
 host = path/to/in_the_news/news.db
 
+or
+
+airflow connections add 'news_db' \
+ --conn-type 'sqlite' \
+ --conn-host '/path/to/your/db/in_the_news/news.db'
+
 airflow scheduler -D
 
 Run the tests:
