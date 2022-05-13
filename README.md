@@ -49,7 +49,7 @@ airflow scheduler -D
 Run the tests:
 python -m pytest -q scripts/tests/test_parser.py
 
-Run the flask app:
-export FLASK_APP=flaskr
+Run the flask app in development mode:
+export FLASK_APP=flask_app
 export FLASK_ENV=development
 flask run

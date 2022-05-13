@@ -8,6 +8,25 @@ from flask_app.db import get_db
 bp = Blueprint("sentiment", __name__)
 
 
+def get_mood_word(score):
+    if score > .66:
+        return "Escstatic"
+    elif score > .33:
+        return "Delighted"
+    elif score > 0:
+        return "Up Beat"
+    elif score == 0:
+        return "Indifferent"
+    elif score > -.33:
+        return "Annoyed"
+    elif score > -.66:
+        return "Belligerant"
+    else:
+        return "Seething"
+
+def get_mood_color_from_score():
+    pass
+
 def get_latest_sentiment():
     sentiment = (
         get_db()
