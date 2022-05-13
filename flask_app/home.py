@@ -9,23 +9,24 @@ bp = Blueprint("sentiment", __name__)
 
 
 def get_mood_word(score):
-    if score > .66:
-        return "Escstatic"
-    elif score > .33:
-        return "Delighted"
+    if score > .50:
+        return "escstatic"
     elif score > 0:
-        return "Up Beat"
+        return "up-beat"
     elif score == 0:
-        return "Indifferent"
-    elif score > -.33:
-        return "Annoyed"
-    elif score > -.66:
-        return "Belligerant"
+        return "indifferent"
+    elif score > -.50:
+        return "annoyed"
     else:
-        return "Seething"
+        return "seething"
 
-def get_mood_color_from_score():
-    pass
+def get_moods_from_sentiment(sentiment):
+    right = get_mood_word(float(sentiment['right_mean_sentiment']))
+    left = get_mood_word(float(sentiment['left_mean_sentiment']))
+    all = get_mood_word(float(sentiment['all_mean_sentiment']))
+    return {'right': right, 'left': left, 'all': all}
+
+
 
 def get_latest_sentiment():
     sentiment = (
@@ -47,4 +48,6 @@ def get_latest_sentiment():
 @bp.route("/")
 def index():
     sentiment = get_latest_sentiment()
-    return render_template("sentiment/index.html", sentiment=sentiment)
+    moods = get_moods_from_sentiment(sentiment)
+    print(moods)
+    return render_template("sentiment/index.html", sentiment=sentiment, moods=moods)

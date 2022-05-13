@@ -1,49 +1,11 @@
-{% macro face(color, type) %}
-<div>
-  <div class="ecstatic">
-    <figure class="face">
-      <span class="eyes">
-        <span class="eye left"></span>
-        <span class="eye right"></span>
-      </span>
-      <span class="mouth"></span>
-    </figure>
-  </div>
-  <div class="up-beat">
-    <figure class="face">
-      <span class="eyes">
-        <span class="eye left"></span>
-        <span class="eye right"></span>
-      </span>
-      <span class="mouth"></span>
-    </figure>
-  </div>
-  <div class="neutral">
-    <figure class="face">
-      <span class="eyes">
-        <span class="eye left"></span>
-        <span class="eye right"></span>
-      </span>
-      <span class="mouth"></span>
-    </figure>
-  </div>
-  <div class="annoyed">
-    <figure class="face">
-      <span class="eyes">
-        <span class="eye left"></span>
-        <span class="eye right"></span>
-      </span>
-      <span class="mouth"></span>
-    </figure>
-  </div>
-  <div class="seething">
-    <figure class="face">
-      <span class="eyes">
-        <span class="eye left"></span>
-        <span class="eye right"></span>
-      </span>
-      <span class="mouth"></span>
-    </figure>
-  </div>
+{% macro face(mood) %}
+<div class="{{mood}}">
+  <figure class="face">
+    <span class="eyes">
+      <span class="eye left"></span>
+      <span class="eye right"></span>
+    </span>
+    <span class="mouth"></span>
+  </figure>
 </div>
 {% endmacro %}

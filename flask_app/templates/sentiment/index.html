@@ -6,15 +6,17 @@ block header %}
   <div>
     <h3>Current Overall Mood Score:</h3>
     <p>{{ sentiment['all_mean_sentiment'] }}</p>
+    {{ face(moods['all']) }}
   </div>
   <div>
     <h3>Current Left Leaning Mood Score:</h3>
     <p>{{ sentiment['left_mean_sentiment'] }}</p>
+    {{ face(moods['left']) }}
   </div>
   <div>
     <h3>Current Right Leaning Mood Score:</h3>
     <p>{{ sentiment['right_mean_sentiment'] }}</p>
+    {{ face(moods['right']) }}
   </div>
-  <!-- {{ face(green, happy) }} -->
 </div>
 {% endblock %}
