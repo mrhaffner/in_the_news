@@ -54,16 +54,15 @@ header {
 }
 
 .up-beat .mouth {
-  border-top: 0;
   -webkit-clip-path: inset(40% 0 0 0);
   clip-path: inset(40% 0 0 0);
 }
 
-.neutral .face {
+.indifferent .face {
   background: #4dcdff;
 }
 
-.neutral .mouth {
+.indifferent .mouth {
   border-radius: 0;
   border: 0px;
   border-bottom: 4px solid black;
@@ -75,7 +74,6 @@ header {
 
 .annoyed .mouth {
   border-radius: 30px 30px 0 0;
-  border-bottom: 0;
   -webkit-clip-path: inset(0 0 30% 0);
   clip-path: inset(0 0 30% 0);
 }
