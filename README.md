@@ -8,6 +8,8 @@ create virtual environment in /venv
 Activate virtual environment:
 source venv/bin/activate
 
+must have sqlite3 installed
+
 Install packages:
 pip install -r requirements.txt
 
