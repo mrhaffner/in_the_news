@@ -13,10 +13,8 @@
   <div>
     <h3>Left Leaning:</h3>
     {{ face(moods['left']) }}
-    <div class="score-container">
-      <span>{{ sentiment['left_mean_sentiment'] }}%</span>
-      {{ direction(trend['left']) }}
-    </div>
+    <span>{{ sentiment['left_mean_sentiment'] }}%</span>
+    {{ direction(trend['left']) }}
   </div>
   <div>
     <h3>All Media:</h3>
