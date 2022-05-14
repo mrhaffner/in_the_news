@@ -3,6 +3,33 @@ header {
   text-align: center;
 }
 
+.meter-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.meter {
+  min-width: 61px;
+  height: 10px;
+  background: #fe0000;
+}
+
+.meter:nth-child(2) {
+  background: #ffa201;
+}
+
+.meter:nth-child(3) {
+  background: #4dcdff;
+}
+
+.meter:nth-child(4) {
+  background: #84d883;
+}
+
+.meter:nth-child(5) {
+  background: #00d903;
+}
+
 .main {
   display: flex;
   justify-content: center;

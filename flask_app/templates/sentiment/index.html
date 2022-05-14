@@ -1,6 +1,13 @@
 {% from "face.html" import face with context %} {% extends 'base.html' %} {%
 block header %}
 <h1>Media Mood-O-Meter</h1>
+<div class="meter-wrapper">
+  <div class="meter"></div>
+  <div class="meter"></div>
+  <div class="meter"></div>
+  <div class="meter"></div>
+  <div class="meter"></div>
+</div>
 {% endblock %} {% block content %}
 <div class="sentiment-container">
   <div>
