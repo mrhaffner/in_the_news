@@ -49,7 +49,6 @@ def get_second_latest_sentiment():
         abort(404, "No sentiment record found!")
 
     # index 0 is the most recent
-    print(sql_rows_to_list(sql_rows))
     return sql_rows_to_list(sql_rows)
 
 

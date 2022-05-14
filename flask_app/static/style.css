@@ -14,7 +14,7 @@ header {
 }
 
 .meter {
-  min-width: 61px;
+  min-width: 69px;
   height: 10px;
   background: #fe0000;
 }
