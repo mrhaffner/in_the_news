@@ -6,6 +6,7 @@ header {
 .meter-wrapper {
   display: flex;
   justify-content: center;
+  margin-top: -15px;
 }
 
 .meter {
