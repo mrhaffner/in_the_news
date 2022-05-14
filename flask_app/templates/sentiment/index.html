@@ -7,16 +7,19 @@ block header %}
     <h3>Left Leaning:</h3>
     {{ face(moods['left']) }}
     <p>{{ sentiment['left_mean_sentiment'] }}%</p>
+    <p>{{ trend['left'] }}</p>
   </div>
   <div>
     <h3>All Media:</h3>
     {{ face(moods['all']) }}
     <p>{{ sentiment['all_mean_sentiment'] }}%</p>
+    <p>{{ trend['all'] }}</p>
   </div>
   <div>
     <h3>Right Leaning:</h3>
     {{ face(moods['right']) }}
     <p>{{ sentiment['right_mean_sentiment'] }}%</p>
+    <p>{{ trend['right'] }}</p>
   </div>
 </div>
 {% endblock %}
