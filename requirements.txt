@@ -1,6 +1,7 @@
 # To ensure app dependencies are ported from your virtual environment/host machine into your container, run 'pip freeze > requirements.txt' in the terminal to overwrite this file
 beautifulsoup4==4.10.0
 Flask==1.1.2
+lxml==4.8.0
 pandas==1.4.2
 pyarrow==8.0.0
 pytest==7.1.2

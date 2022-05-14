@@ -18,7 +18,6 @@ pip install "apache-airflow==2.2.3" --constraint "https://raw.githubusercontent.
 
 Set up airflow:
 airflow db init
-cd ~/ariflow
 airflow users create \
  --username admin \
  --firstname FIRST_NAME \
@@ -29,22 +28,21 @@ airflow users create \
 open airflow.cfg and change dags_folder to point to project directory
 dags_folder = path/to/project/in_the_news/dags
 
+You may also want to set (hides the 30 example DAGS in webserver UI):
+load_examples = False
+$airflow db reset
+
 Set up the database:
 python dags/scripts/setup/make_table.py
 
-airflow webserver -D
-go to http://localhost:8080
-
-set up database connection path:
-In airflow webbrowser, go to Admin tab then connections
-Add new connections name = news, connection type = sqlite,
-host = path/to/in_the_news/news.db
-
-or
-
+set up database connection path (if the airflow meta db is ever reset, you will need to set this again):
 airflow connections add 'news_db' \
  --conn-type 'sqlite' \
  --conn-host '/path/to/your/db/in_the_news/news.db'
+
+Start the webserver if you wish to use the UI:
+airflow webserver -D
+go to http://localhost:8080
 
 airflow scheduler -D
 
