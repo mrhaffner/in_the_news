@@ -27,10 +27,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route("/hello") #!!!!!!!!!!!
-    def hello():
-        return "Hello, World!"
-
     # register the database commands
     from flask_app import db
 

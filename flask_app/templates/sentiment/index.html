@@ -1,22 +1,22 @@
 {% from "face.html" import face with context %} {% extends 'base.html' %} {%
 block header %}
-<h1>Media Moodometer</h1>
+<h1>Media Mood-O-Meter</h1>
 {% endblock %} {% block content %}
 <div class="sentiment-container">
   <div>
-    <h3>Current Overall Mood Score:</h3>
-    <p>{{ sentiment['all_mean_sentiment'] }}</p>
-    {{ face(moods['all']) }}
-  </div>
-  <div>
-    <h3>Current Left Leaning Mood Score:</h3>
-    <p>{{ sentiment['left_mean_sentiment'] }}</p>
+    <h3>Left Leaning:</h3>
     {{ face(moods['left']) }}
+    <p>{{ sentiment['left_mean_sentiment'] }}</p>
   </div>
   <div>
-    <h3>Current Right Leaning Mood Score:</h3>
-    <p>{{ sentiment['right_mean_sentiment'] }}</p>
+    <h3>All Media:</h3>
+    {{ face(moods['all']) }}
+    <p>{{ sentiment['all_mean_sentiment'] }}</p>
+  </div>
+  <div>
+    <h3>Right Leaning:</h3>
     {{ face(moods['right']) }}
+    <p>{{ sentiment['right_mean_sentiment'] }}</p>
   </div>
 </div>
 {% endblock %}

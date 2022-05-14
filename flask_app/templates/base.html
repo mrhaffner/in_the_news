@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<title>Media Moodometer</title>
+<title>Media Mood-O-Meter</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-<section>
+<body>
   <header>{% block header %}{% endblock %}</header>
-  {% block content %}{% endblock %}
-</section>
+  <section class="main">{% block content %}{% endblock %}</section>
+</body>
