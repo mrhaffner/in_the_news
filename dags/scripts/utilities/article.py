@@ -14,11 +14,9 @@ class Article:
 
 def _create_title(article_soup: BeautifulSoup) -> str:
     """
-        Takes an <item></item> soup and finds the the title tag
-
-        Cleans and retuns text from title tag
-
-        Returns empty string if there is no title tag
+    Takes an <item></item> soup and finds the the title tag
+    Cleans and retuns text from title tag
+    Returns empty string if there is no title tag
     """
     title = ''
     titles = article_soup.find_all('title')
@@ -31,11 +29,9 @@ def _create_title(article_soup: BeautifulSoup) -> str:
 
 def _create_pub_date(article_soup: BeautifulSoup) -> str:
     """
-        Takes an <item></item> soup and finds the the pubDate tag
-
-        Cleans and retuns text from pubDate tag
-        
-        Returns empty string if there is no pubDate tag
+    Takes an <item></item> soup and finds the the pubDate tag
+    Cleans and retuns text from pubDate tag
+    Returns empty string if there is no pubDate tag
     """
     pub_date = ''
     pub_dates = article_soup.find_all('pubDate')
@@ -43,19 +39,14 @@ def _create_pub_date(article_soup: BeautifulSoup) -> str:
     if len(pub_dates) > 0:
         pub_date = article_soup.pubDate.get_text()
 
-    # optionally add date if blank?
-    # convert to some datatime standard?
-
     return pub_date.strip()
     
 
 def _create_url(article_soup: BeautifulSoup) -> str:
     """
-        Takes an <item></item> soup and finds the the link tag
-
-        Cleans and retuns text from link tag
-        
-        Returns empty string if there is no link tag
+    Takes an <item></item> soup and finds the the link tag
+    Cleans and retuns text from link tag
+    Returns empty string if there is no link tag
     """
     url = ''
     urls = article_soup.find_all('link')
@@ -68,11 +59,9 @@ def _create_url(article_soup: BeautifulSoup) -> str:
 
 def _create_author(article_soup: BeautifulSoup) -> str:
     """
-        Takes an <item></item> soup and finds the the dc:creator or author tag
-
-        Cleans and retuns text from the tag (prefentially uses dc:creator tag)
-        
-        Returns empty string if there is no dc:creator or author tag
+    Takes an <item></item> soup and finds the the dc:creator or author tag
+    Cleans and retuns text from the tag (prefentially uses dc:creator tag)
+    Returns empty string if there is no dc:creator or author tag
     """
     author = ''
     creators = article_soup.find_all('creator')

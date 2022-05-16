@@ -1,7 +1,8 @@
 import sqlite3
 
 
-def _make_table():
+def _make_table() -> None:
+    """Creates a sentiment sqlite table"""
     conn = sqlite3.connect('news.db') # ????
     cur = conn.cursor()
 

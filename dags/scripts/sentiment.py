@@ -63,27 +63,15 @@ def _classify_sentiment(articles_df: pd.DataFrame) -> pd.DataFrame:
     return articles_df
 
 
-def sentimentizer():
+def sentimentizer() -> None:
+    '''Gathers means sentiment data from all, left leaning, and right leaning media and saves to database.'''
     parsed_dir_root = Path(Variable.get('base_dir')).joinpath('data/parsed')
     parsed_dir = add_datetime_to_path(parsed_dir_root, Variable.get('current_time'))
     articles_df = _get_articles_df_from_path(parsed_dir)
     classified_df = _classify_sentiment(articles_df)
-
     leaning_mean_df = classified_df.groupby('leaning').mean()
 
     sqlite_hook = SqliteHook(sqlite_conn_id='news_db')
-    
     rows = [(str(datetime.datetime.utcnow()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], articles_df['sentiment'].mean())]
-
     target_fields = ['datetime', 'left_mean_sentiment', 'right_mean_sentiment', 'all_mean_sentiment']
-
     sqlite_hook.insert_rows(table='Sentiment', rows=rows, target_fields=target_fields, reaplce=True)
-
-    #percent negative articles
-    #percent positive articles
-    #visual percent neg/percent pos
-
-    #want to save a snapshot
-    # mildly positive, very positive, neutral, mildly negative, very negative
-    # snapshot will have statistics for each news source, all news sources, and by political leanings
-    #probably want to take all parquet files into a single df for this analysis
