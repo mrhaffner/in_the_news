@@ -49,7 +49,10 @@ airflow scheduler -D
 Run the tests:
 python -m pytest -q scripts/tests/test_parser.py
 
-Run the flask app in development mode:
+Run the flask app in development mode (this needs two succesful runs of the etl for datapoints):
 export FLASK_APP=flask_app
 export FLASK_ENV=development
 flask run
+
+instructions to set up an NGINX/gunicorn server to host the website:
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
