@@ -29,9 +29,10 @@ def get_moods_from_sentiment(sentiment):
 
 
 def float_dict_to_percent(dict):
+    new_dict = {}
     for key in dict:
-        dict[key] = int(round(float(dict[key]) * 100, 0))
-    return dict
+        new_dict[key] = int(round(float(dict[key]) * 100, 0))
+    return new_dict
 
 
 def get_second_latest_sentiment():
