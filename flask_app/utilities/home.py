@@ -1,11 +1,5 @@
-
-from flask import Blueprint
-from flask import render_template
 from werkzeug.exceptions import abort
-
 from flask_app.db import get_db
-
-bp = Blueprint("sentiment", __name__)
 
 
 def get_mood_word(score):
@@ -80,13 +74,3 @@ def get_sentiment_trend(sentiments):
     trend['all'] = get_trend(sentiments[0]['all_mean_sentiment'], sentiments[1]['all_mean_sentiment'])
     trend['right'] = get_trend(sentiments[0]['right_mean_sentiment'], sentiments[1]['right_mean_sentiment'])
     return trend
-
-
-@bp.route("/")
-def index():
-    sentiments = get_second_latest_sentiment()
-    moods = get_moods_from_sentiment(sentiments[0])
-    perc_sentiment = float_dict_to_percent(sentiments[0])
-    trend = get_sentiment_trend(sentiments)
-
-    return render_template("sentiment/index.html", sentiment=perc_sentiment, moods=moods, trend=trend)
