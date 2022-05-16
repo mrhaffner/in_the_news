@@ -28,10 +28,14 @@ def get_moods_from_sentiment(sentiment):
     return {'right': right, 'left': left, 'all': all}
 
 
+def float_to_percent(n):
+    return int(round(float(n) * 100, 0))
+
+
 def float_dict_to_percent(dict):
     new_dict = {}
     for key in dict:
-        new_dict[key] = int(round(float(dict[key]) * 100, 0))
+        new_dict[key] = float_to_percent(dict[key])
     return new_dict
 
 
@@ -62,9 +66,9 @@ def sql_rows_to_list(sql):
 
 
 def get_trend(most_recent, second_recent):
-    if most_recent > second_recent:
+    if float_to_percent(most_recent) > float_to_percent(second_recent):
         return "up"
-    elif most_recent < second_recent:
+    elif float_to_percent(most_recent) < float_to_percent(second_recent):
         return "down"
     else:
         return "none"
