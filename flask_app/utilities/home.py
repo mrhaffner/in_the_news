@@ -49,7 +49,6 @@ def get_second_latest_sentiment() -> None:
 
 def sql_rows_to_list(sql_rows: List[sqlite3.Row]) -> List[Sentiment]:
     '''Takes a list of sql_row object and converts it to a list of sentiment dictionaries.'''
-    print('rows',type(sql_rows))
     return [sql_row_to_dict(s) for s in sql_rows]
 
 
@@ -64,21 +63,21 @@ def sql_row_to_dict(sql: sqlite3.Row) -> Sentiment:
 
 def get_moods_from_sentiment(sentiment: Sentiment) -> Mood:
     '''Creates and returns a dictionary with moods for each sentiment category.'''
-    right = get_mood_word(float(sentiment['right_mean_sentiment']))
-    left = get_mood_word(float(sentiment['left_mean_sentiment']))
-    all = get_mood_word(float(sentiment['all_mean_sentiment']))
+    right = get_mood_word(float_to_percent(sentiment['right_mean_sentiment']))
+    left = get_mood_word(float_to_percent(sentiment['left_mean_sentiment']))
+    all = get_mood_word(float_to_percent(sentiment['all_mean_sentiment']))
     return {'right': right, 'left': left, 'all': all}
 
 
-def get_mood_word(score: float) -> str:
-    '''Takes in a sentiment score from 1 to -1 and returns a text representationg of that score.'''
-    if score > .50:
+def get_mood_word(score: int) -> str:
+    '''Takes in a sentiment score from 100 to -100 and returns a text representationg of that score.'''
+    if score > 50:
         return "escstatic"
-    elif score > .05:
+    elif score > 5:
         return "up-beat"
-    elif score > -.05:
+    elif score > -5:
         return "indifferent"
-    elif score > -.50:
+    elif score > -50:
         return "annoyed"
     else:
         return "seething"
