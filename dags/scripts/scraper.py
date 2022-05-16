@@ -39,6 +39,7 @@ def scraper() -> None:
     csv_path = Path(__file__).parent.joinpath('config/news_sites.csv')
     rss_websites = csv_to_dict(csv_path)
 
+    # paths are created with base_dir and datetime passed in from airflow
     parsed_dir_root = Path(Variable.get('base_dir')).joinpath('data/scraped')
     path_to_save = add_datetime_to_path(parsed_dir_root, Variable.get('current_time'))
 
