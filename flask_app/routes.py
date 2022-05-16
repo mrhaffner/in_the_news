@@ -8,6 +8,7 @@ bp = Blueprint("sentiment", __name__)
 
 @bp.route("/")
 def index():
+    '''Creates the index route that displays sentiment data'''
     sentiments = get_second_latest_sentiment()
     moods = get_moods_from_sentiment(sentiments[0])
     perc_sentiment = float_dict_to_percent(sentiments[0])
