@@ -1,8 +1,29 @@
-from werkzeug.exceptions import abort
+import sqlite3
+
 from flask_app.db import get_db
+from typing import Dict, List, TypedDict
+from werkzeug.exceptions import abort
 
 
-def get_second_latest_sentiment():
+class Sentiment(TypedDict):
+    left_mean_sentiment: str
+    right_mean_sentiment: str
+    all_mean_sentiment: str
+
+
+class Mood(TypedDict):
+    left: str
+    right: str
+    all: str
+
+
+class Trend(TypedDict):
+    left: str
+    right: str
+    all: str
+
+
+def get_second_latest_sentiment() -> None:
     '''
     Fetches most recent 2 sentiment data from database.
     Returns those rows as a list of dicts. 0 index being most recent.
@@ -18,6 +39,7 @@ def get_second_latest_sentiment():
         .fetchall()
     )
 
+
     if sql_rows is None:
         abort(404, "No sentiment record found!")
 
@@ -25,13 +47,14 @@ def get_second_latest_sentiment():
     return sql_rows_to_list(sql_rows)
 
 
-def sql_rows_to_list(sql):
-    '''Takes a sql_row object and converts it to a list of dictionaries.'''
-    return [sql_row_to_dict(s) for s in sql]
+def sql_rows_to_list(sql_rows: List[sqlite3.Row]) -> List[Sentiment]:
+    '''Takes a list of sql_row object and converts it to a list of sentiment dictionaries.'''
+    print('rows',type(sql_rows))
+    return [sql_row_to_dict(s) for s in sql_rows]
 
 
-def sql_row_to_dict(sql):
-    '''Converts one sql_row into a dictionary.'''
+def sql_row_to_dict(sql: sqlite3.Row) -> Sentiment:
+    '''Converts one sql_row into a sentiment dictionary.'''
     return {
             'left_mean_sentiment': float(sql['left_mean_sentiment']), 
             'right_mean_sentiment': float(sql['right_mean_sentiment']), 
@@ -39,7 +62,7 @@ def sql_row_to_dict(sql):
             }    
 
 
-def get_moods_from_sentiment(sentiment):
+def get_moods_from_sentiment(sentiment: Sentiment) -> Mood:
     '''Creates and returns a dictionary with moods for each sentiment category.'''
     right = get_mood_word(float(sentiment['right_mean_sentiment']))
     left = get_mood_word(float(sentiment['left_mean_sentiment']))
@@ -47,7 +70,7 @@ def get_moods_from_sentiment(sentiment):
     return {'right': right, 'left': left, 'all': all}
 
 
-def get_mood_word(score):
+def get_mood_word(score: float) -> str:
     '''Takes in a sentiment score from 1 to -1 and returns a text representationg of that score.'''
     if score > .50:
         return "escstatic"
@@ -61,7 +84,7 @@ def get_mood_word(score):
         return "seething"
 
 
-def float_dict_to_percent(dict):
+def float_dict_to_percent(dict: Dict[str, float]) -> Dict[str, float]:
     '''
     Takes in a dictionary where all values are floats.
     Creates a new dictionary with the same keys where all values are converted to percentage with 0 decimals.
@@ -72,14 +95,14 @@ def float_dict_to_percent(dict):
     return new_dict
 
 
-def float_to_percent(n):
+def float_to_percent(n: float) -> int:
     '''Converts a float to a percentage. Rounds to 0 decimal places.'''
     return int(round(float(n) * 100, 0))
 
 
-def get_sentiment_trend(sentiments):
+def get_sentiment_trend(sentiments: List[Sentiment]) -> Trend:
     '''
-    Creats a trend dictionary from an array of 2 sentiment dictionaries.
+    Creats a trend dictionary from a list of 2 sentiment dictionaries.
     Contains a trend direction for each sentiment category.
     '''
     trend = {}
@@ -89,7 +112,7 @@ def get_sentiment_trend(sentiments):
     return trend
 
 
-def get_trend(most_recent, second_recent):
+def get_trend(most_recent: float, second_recent: float) -> str:
     '''
     Takes in two sentiment scores and outputs a string indicating whether the scores are increasing,
     decreasing or staying the same.
