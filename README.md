@@ -29,13 +29,14 @@ $ airflow users create \
  --email admin@example.org
 ```
 
-Open airflow.cfg in the airflow folder and update dags_folder:
+Open airflow.cfg in the airflow folder and update dags_folder property (found in first section: [core]):
 
 ```sh
+$ nano ~/airflow/airflow.cfg
 dags_folder = path/to/project/in_the_news/dags
 ```
 
-You may also want to update (hides the 30 example DAGS in webserver UI):
+You may also want to update load_examples property to hide the 30 example DAGS in webserver UI (found in first section: [core]):
 
 ```sh
 load_examples = False
@@ -76,7 +77,7 @@ Run the tests:
 $ python -m pytest -q scripts/tests/test_parser.py
 ```
 
-Run the flask app in development mode (this needs two succesful runs of the etl for datapoints):
+Run the flask app in development mode (this needs two succesful runs of the ETL for datapoints):
 
 ```sh
 $ export FLASK_APP=flask_app
@@ -90,12 +91,12 @@ Visit the flask app in your web browser at http://localhost:5000
 
 I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
 
-I followed these instructions to set up a NGINX and uWSGI server to run the flask app in production:
+I followed these instructions to set up a NGINX and uWSGI server to run the flask app in production (you will need to use python 3.9):
 https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
 
 Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
 
-### Config:
+### Configuration:
 
 The RSS feeds to be scraped are found in /dags/scripts/config/news_sites.csv
 
