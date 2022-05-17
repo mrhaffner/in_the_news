@@ -1,58 +1,94 @@
-Data Engineering Project
+## In The News
 
-Scrapes News Websites to gather keywords for analysis
+A simple ETL that gathers data from news RSS feeds and analyzes their sentiment.
+Visit the Mood-O-Meter to see the media's current mood:
+https://moodometer.mattrhaffner.com/
 
-Setting up:
-create virtual environment in /venv
+#### Set Up:
 
-Activate virtual environment:
-source venv/bin/activate
+Requires python 3.9 and sqlite3.
+After cloning the repository, cd into /in_the_news:
 
-must have sqlite3 installed
-
-Install packages:
-pip install -r requirements.txt
-
-Install airflow:
-pip install "apache-airflow==2.2.3" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.2.3/constraints-no-providers-3.9.txt"
+```sh
+$ python3.9 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
 
 Set up airflow:
-airflow db init
-airflow users create \
+
+```sh
+$ airflow db init
+$ airflow users create \
  --username admin \
  --firstname FIRST_NAME \
  --lastname LAST_NAME \
  --role Admin \
  --email admin@example.org
+```
 
-open airflow.cfg and change dags_folder to point to project directory
+Open airflow.cfg in the airflow folder and update dags_folder:
+
+```sh
 dags_folder = path/to/project/in_the_news/dags
+```
 
-You may also want to set (hides the 30 example DAGS in webserver UI):
+You may also want to update (hides the 30 example DAGS in webserver UI):
+
+```sh
 load_examples = False
-$airflow db reset
+```
 
-Set up the database:
-python dags/scripts/setup/make_table.py
+You may need to reset the airflow meta database to hide the example dags:
 
-set up database connection path (if the airflow meta db is ever reset, you will need to set this again):
+```sh
+$ airflow db reset
+```
+
+Set up the project database:
+
+```sh
+$ python dags/scripts/setup/make_table.py
+```
+
+Set up database connection path (if the airflow meta db is ever reset, you will need to set this again):
+
+```sh
 airflow connections add 'news_db' \
  --conn-type 'sqlite' \
  --conn-host '/path/to/your/db/in_the_news/news.db'
+```
 
-Start the webserver if you wish to use the UI:
-airflow webserver -D
-go to http://localhost:8080
+Start the scheduler and webserver in daemon mode:
 
-airflow scheduler -D
+```sh
+$ airflow scheduler -D
+$ airflow webserver -D
+```
+
+Visit to http://localhost:8080 in your web browser and login to use the UI and start the DAG.
 
 Run the tests:
-python -m pytest -q scripts/tests/test_parser.py
+
+```sh
+$ python -m pytest -q scripts/tests/test_parser.py
+```
 
 Run the flask app in development mode (this needs two succesful runs of the etl for datapoints):
+
+```sh
 export FLASK_APP=flask_app
 export FLASK_ENV=development
 flask run
+```
 
-instructions to set up an NGINX/gunicorn server to host the website:
-https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04
+Visit the flask app in your web browser at http://localhost:5000
+
+#### Deploy
+
+I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
+
+I followed these instructions to set up a NGINX and uWSGI server to run the flask app in production:
+https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
+
+Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
