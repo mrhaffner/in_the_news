@@ -1,10 +1,12 @@
 ## In The News
 
 A simple ETL that gathers data from news RSS feeds and analyzes their sentiment.
+
 Visit the Mood-O-Meter to see the media's current mood:
+
 https://moodometer.mattrhaffner.com/
 
-#### Set Up:
+### Set Up:
 
 Requires python 3.9 and sqlite3.
 After cloning the repository, cd into /in_the_news:
@@ -66,7 +68,7 @@ $ airflow scheduler -D
 $ airflow webserver -D
 ```
 
-Visit to http://localhost:8080 in your web browser and login to use the UI and start the DAG.
+Visit http://localhost:8080 in your web browser and login to use the UI and start the DAG.
 
 Run the tests:
 
@@ -84,7 +86,7 @@ flask run
 
 Visit the flask app in your web browser at http://localhost:5000
 
-#### Deploy
+### Deployment:
 
 I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
 
