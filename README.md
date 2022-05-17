@@ -56,7 +56,7 @@ $ python dags/scripts/setup/make_table.py
 Set up database connection path (if the airflow meta db is ever reset, you will need to set this again):
 
 ```sh
-airflow connections add 'news_db' \
+$ airflow connections add 'news_db' \
  --conn-type 'sqlite' \
  --conn-host '/path/to/your/db/in_the_news/news.db'
 ```
@@ -79,9 +79,9 @@ $ python -m pytest -q scripts/tests/test_parser.py
 Run the flask app in development mode (this needs two succesful runs of the etl for datapoints):
 
 ```sh
-export FLASK_APP=flask_app
-export FLASK_ENV=development
-flask run
+$ export FLASK_APP=flask_app
+$ export FLASK_ENV=development
+$ flask run
 ```
 
 Visit the flask app in your web browser at http://localhost:5000
