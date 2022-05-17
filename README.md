@@ -94,3 +94,9 @@ I followed these instructions to set up a NGINX and uWSGI server to run the flas
 https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
 
 Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
+
+### Config:
+
+The rss feeds to be scraped are found in /dags/scripts/config/news_sites.csv
+
+It is possible to add more RSS feeds to htis file. I suggest adding an equal number of right and left leaning websites. It is possible that additional RSS feeds will not be parsed properly - make sure to check the data saved to the .parquet files to ensure they are compatible.
