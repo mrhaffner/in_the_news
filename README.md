@@ -97,6 +97,6 @@ Note that flaskapp.py and wsgi.py in the root directory serve as entry points fo
 
 ### Config:
 
-The rss feeds to be scraped are found in /dags/scripts/config/news_sites.csv
+The RSS feeds to be scraped are found in /dags/scripts/config/news_sites.csv
 
-It is possible to add more RSS feeds to htis file. I suggest adding an equal number of right and left leaning websites. It is possible that additional RSS feeds will not be parsed properly - make sure to check the data saved to the .parquet files to ensure they are compatible.
+It is possible to add more RSS feeds to this file. I suggest adding an equal number of right and left leaning websites. It is possible that additional RSS feeds will not be parsed properly - make sure to check the data saved to the .parquet files to ensure they are compatible.
