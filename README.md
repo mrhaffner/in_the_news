@@ -1,10 +1,12 @@
 ## In The News
 
-A simple ETL that gathers data from news RSS feeds and analyzes their sentiment.
+A simple ETL that gathers data hourly from news RSS feeds and analyzes their sentiment.
 
 Visit the Mood-O-Meter to see the media's current mood:
 
 https://moodometer.mattrhaffner.com/
+
+![alt text](project_diagram.jpg)
 
 ### Set Up:
 
