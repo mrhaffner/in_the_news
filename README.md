@@ -10,7 +10,7 @@ https://moodometer.mattrhaffner.com/
 
 ## Set Up
 
-Requires python 3.9 and sqlite3.
+Requires python 3.9, pip, venv, and sqlite3.
 After cloning the repository, cd into /in_the_news:
 
 ```sh
