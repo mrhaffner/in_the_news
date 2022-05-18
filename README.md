@@ -8,7 +8,7 @@ https://moodometer.mattrhaffner.com/
 
 ![alt text](project_diagram.png)
 
-## Set Up:
+## Set Up
 
 Requires python 3.9 and sqlite3.
 After cloning the repository, cd into /in_the_news:
@@ -89,7 +89,7 @@ $ flask run
 
 Visit the flask app in your web browser at http://localhost:5000
 
-## Deployment:
+## Deployment
 
 I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
 
@@ -98,7 +98,7 @@ https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
 
 Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
 
-## Configuration:
+## Configuration
 
 The RSS feeds to be scraped are found in /dags/scripts/config/news_sites.csv
 
