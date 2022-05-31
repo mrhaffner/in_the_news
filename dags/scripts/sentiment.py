@@ -15,6 +15,6 @@ def sentimentizer() -> None:
     leaning_mean_df = classified_df.groupby('leaning').mean()
 
     sqlite_hook = SqliteHook(sqlite_conn_id='news_db')
-    rows = [(str(datetime.datetime.utcnow()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], articles_df['sentiment'].mean())]
+    rows = [(str(datetime.datetime.utcnow()), leaning_mean_df.loc['left']['sentiment'], leaning_mean_df.loc['right']['sentiment'], classified_df['sentiment'].mean())]
     target_fields = ['datetime', 'left_mean_sentiment', 'right_mean_sentiment', 'all_mean_sentiment']
     sqlite_hook.insert_rows(table='Sentiment', rows=rows, target_fields=target_fields, reaplce=True)
