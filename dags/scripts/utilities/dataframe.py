@@ -22,7 +22,7 @@ def get_articles_df_from_path(dir: Path) -> pd.DataFrame:
 
 def _classify_leaning(publisher: str) -> str:
     '''Returns the political leaning of a given publisher'''
-    csv_path = Path(__file__).parent.joinpath('config/news_sites.csv')
+    csv_path = Path(__file__).parent.parent.joinpath('config/news_sites.csv')
     df = pd.read_csv(csv_path)
     leaning = df[df['id'] == publisher]['leaning'].values
     
