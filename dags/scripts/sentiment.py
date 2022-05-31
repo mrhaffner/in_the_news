@@ -1,38 +1,12 @@
 import datetime
 import pandas as pd
+
 from pathlib import Path
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from airflow.models import Variable
 from airflow.providers.sqlite.hooks.sqlite import SqliteHook
+from scripts.utilities.dataframe import classify_leaning, get_articles_df_from_path 
 from scripts.utilities.pathing import add_datetime_to_path
-
-
-def _get_articles_df_from_path(dir: Path) -> pd.DataFrame:
-    '''
-    Creates a dataframe containing a list of news articles from a path containing multiple Parquet files
-
-    Ouput dataframe will have colums:
-        title: str (article title)
-        pub_date: str (date article was published)
-        url: str (link to article)
-        author: str
-        publisher: str
-    '''
-    path_to_parquet = Path(__file__).parent.parent.joinpath(dir)
-    articles_df = pd.read_parquet(path_to_parquet, engine="pyarrow")
-    return articles_df
-
-
-def _classify_leaning(publisher: str) -> str:
-    '''Returns the political leaning of a given publisher'''
-    csv_path = Path(__file__).parent.joinpath('config/news_sites.csv')
-    df = pd.read_csv(csv_path)
-    leaning = df[df['id'] == publisher]['leaning'].values
-    
-    if len(leaning) > 0:
-        return leaning[0]
-    else:
-        return ''
 
 
 def _get_sentiment(text: str) -> float:
@@ -59,7 +33,7 @@ def _classify_sentiment(articles_df: pd.DataFrame) -> pd.DataFrame:
         leaning: str (values 'right' or 'left' representing political leaning)
     '''
     articles_df['sentiment'] = articles_df['title'].apply(_get_sentiment)
-    articles_df['leaning'] = articles_df['publisher'].apply(_classify_leaning)
+    articles_df['leaning'] = articles_df['publisher'].apply(classify_leaning)
     return articles_df
 
 
@@ -67,7 +41,7 @@ def sentimentizer() -> None:
     '''Gathers means sentiment data from all, left leaning, and right leaning media and saves to database.'''
     parsed_dir_root = Path(Variable.get('base_dir')).joinpath('data/parsed')
     parsed_dir = add_datetime_to_path(parsed_dir_root, Variable.get('current_time'))
-    articles_df = _get_articles_df_from_path(parsed_dir)
+    articles_df = get_articles_df_from_path(parsed_dir)
     classified_df = _classify_sentiment(articles_df)
     leaning_mean_df = classified_df.groupby('leaning').mean()
 
