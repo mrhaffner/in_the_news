@@ -16,3 +16,6 @@ build/
 *.egg-info/
 
 flaskapp.sock
+
+word_classifier_spike.ipynb
+.ipynb_checkpoints
