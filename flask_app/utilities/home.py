@@ -49,10 +49,10 @@ def get_second_latest_sentiment() -> None:
 
 def sql_rows_to_list(sql_rows: List[sqlite3.Row]) -> List[Sentiment]:
     '''Takes a list of sql_row object and converts it to a list of sentiment dictionaries.'''
-    return [sql_row_to_dict(s) for s in sql_rows]
+    return [sql_row_to_sentiment(s) for s in sql_rows]
 
 
-def sql_row_to_dict(sql: sqlite3.Row) -> Sentiment:
+def sql_row_to_sentiment(sql: sqlite3.Row) -> Sentiment:
     '''Converts one sql_row into a sentiment dictionary.'''
     return {
             'left_mean_sentiment': float(sql['left_mean_sentiment']), 
@@ -122,3 +122,19 @@ def get_trend(most_recent: float, second_recent: float) -> str:
         return "down"
     else:
         return "none"
+
+
+def get_unhappy_words():
+    sql_row = (
+        get_db()
+        .execute(
+            '''
+            SELECT *
+            FROM Unhappy_words
+            ORDER BY datetime DESC LIMIT 1;
+            '''
+        )
+        .fetchone()
+    )
+
+    return sql_row

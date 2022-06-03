@@ -9,24 +9,53 @@
   <div class="meter"></div>
 </div>
 {% endblock %} {% block content %}
-<div class="sentiment-container">
-  <div>
-    <h3>Left Leaning</h3>
-    {{ face(moods['left']) }}
-    <span>{{ sentiment['left_mean_sentiment'] }}%</span>
-    {{ direction(trend['left']) }}
-  </div>
-  <div>
-    <h3>All Media</h3>
-    {{ face(moods['all']) }}
-    <span>{{ sentiment['all_mean_sentiment'] }}%</span>
-    {{ direction(trend['all']) }}
-  </div>
-  <div>
-    <h3>Right Leaning</h3>
-    {{ face(moods['right']) }}
-    <span>{{ sentiment['right_mean_sentiment'] }}%</span>
-    {{ direction(trend['right']) }}
+<div class="sentiment-wrapper content-spacer">
+  <div class="sentiment-container">
+    <div>
+      <h3>Left Leaning</h3>
+      {{ face(moods['left']) }}
+      <span>{{ sentiment['left_mean_sentiment'] }}%</span>
+      {{ direction(trend['left']) }}
+    </div>
+    <div>
+      <h3>All Media</h3>
+      {{ face(moods['all']) }}
+      <span>{{ sentiment['all_mean_sentiment'] }}%</span>
+      {{ direction(trend['all']) }}
+    </div>
+    <div>
+      <h3>Right Leaning</h3>
+      {{ face(moods['right']) }}
+      <span>{{ sentiment['right_mean_sentiment'] }}%</span>
+      {{ direction(trend['right']) }}
+    </div>
   </div>
 </div>
+<h3 class="subheader">Unhappy About</h3>
+<div class="sentiment-wrapper">
+  <div class="sentiment-container">
+    <div class="word-container">
+      <ul>
+        <li>{{ words['left_word_1'] }}</li>
+        <li>{{ words['left_word_2'] }}</li>
+        <li>{{ words['left_word_3'] }}</li>
+      </ul>
+    </div>
+    <div class="word-container">
+      <ul>
+        <li>{{ words['all_word_1'] }}</li>
+        <li>{{ words['all_word_2'] }}</li>
+        <li>{{ words['all_word_3'] }}</li>
+      </ul>
+    </div>
+    <div class="word-container">
+      <ul>
+        <li>{{ words['right_word_1'] }}</li>
+        <li>{{ words['right_word_2'] }}</li>
+        <li>{{ words['right_word_3'] }}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

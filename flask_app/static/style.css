@@ -7,6 +7,20 @@ header {
   text-align: center;
 }
 
+ul {
+  padding-inline-start: 0px;
+}
+
+li {
+  list-style-type: none;
+  text-align: left;
+}
+
+.subheader {
+  text-align: center;
+  margin-top: 60px;
+}
+
 .meter-wrapper {
   display: flex;
   justify-content: center;
@@ -35,17 +49,20 @@ header {
   background: #00d903;
 }
 
-.main {
+.sentiment-wrapper {
   display: flex;
   justify-content: center;
 }
 
 .sentiment-container {
-  margin-top: 120px;
   width: 600px;
   display: flex;
   justify-content: space-between;
   text-align: center;
+}
+
+.content-spacer {
+  margin-top: 120px;
 }
 
 .face {
@@ -140,4 +157,10 @@ header {
 
 .down {
   color: #fe0000;
+}
+
+.word-container {
+  width: 180px;
+  display: flex;
+  justify-content: center;
 }
