@@ -90,6 +90,7 @@ marshmallow-sqlalchemy==0.26.1
 mock==3.0.5
 more-itertools==4.2.0
 netifaces==0.10.4
+nltk==3.7
 numpy==1.22.3
 oauthlib==3.1.0
 openapi-schema-validator==0.1.5

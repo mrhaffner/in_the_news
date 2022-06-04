@@ -4,7 +4,6 @@ from pathlib import Path
 from scripts.parser import parser
 from scripts.scraper import scraper
 from scripts.sentiment import sentimentizer
-from scripts.word_classifier import word_classifier
 
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
@@ -48,16 +47,11 @@ with DAG(
         python_callable=parser,
     )
 
-    t3_s = PythonOperator(
+    t3 = PythonOperator(
         task_id='generate_rss_sentiment',
         depends_on_past=True,
         python_callable=sentimentizer,
     )
 
-    t3_w = PythonOperator(
-        task_id='generate_rss_words',
-        depends_on_past=True,
-        python_callable=word_classifier,
-    )
 
-    t1 >> t2 >> [t3_s, t3_w]
+    t1 >> t2 >> t3
