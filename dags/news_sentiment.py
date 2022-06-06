@@ -12,8 +12,6 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
 
-
-
 # Set variables for external python scripts
 Variable.set('base_dir', Path(__file__).parent.parent)
 Variable.set('current_time', datetime.now(timezone.utc))

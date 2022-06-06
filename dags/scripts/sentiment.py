@@ -1,3 +1,4 @@
+from ast import Str
 import datetime
 import pandas as pd
 import string
@@ -11,15 +12,21 @@ from nltk.corpus import stopwords
 from scripts.utilities.dataframe import create_sentiment_df
 from scripts.utilities.pathing import add_datetime_to_path
 
-def _remove_punctuation(text):
+def _remove_punctuation(text: Str) -> Str:
+    '''Removes punctuation from a given string'''
     return ''.join([w for w in text if w not in string.punctuation])
 
 
-def _remove_stopwords(words):
+def _remove_stopwords(words: Str) -> Str:
+    '''Removes stopwords from a given string (English language only).'''
     return [word for word in words if word not in stopwords.words('english')]
 
 
 def _tokenize_articles_df(df: pd.DataFrame) -> pd.DataFrame:
+    '''
+    Creates a tokenized "token" column from a "cleaned" column in the given dataframe.
+    "cleaned" must be of type string.  "token" will be a list of one word strings.
+    '''
     # create new column with cleaned title
     df['cleaned'] = df['title'].apply(lambda x: _remove_punctuation(x))
     df['cleaned'] = df['cleaned'].apply(lambda x: x.lower())
@@ -32,12 +39,18 @@ def _tokenize_articles_df(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _add_counter_df(df: pd.DataFrame) -> pd.DataFrame:
+    '''
+    Creates a "counter" column from a "tokens" column in a given dataframe.
+    The "tokens" column must be a list of one word strings. The "counter" column
+    will be a Counter() object.
+    '''
     # create a counter
     df['counter'] = df['tokens'].apply(lambda x: Counter(x))
     return df
 
 
 def  _get_aggregate_counter(df: pd.DataFrame) -> Counter:
+    '''Aggregates a "counter" column of Counter objects into a single Counter object.'''
     counter_list = list(df['counter'])
     agg_count = Counter()
 
@@ -48,6 +61,10 @@ def  _get_aggregate_counter(df: pd.DataFrame) -> Counter:
 
 
 def word_classifier(classified_df: pd.DataFrame) -> None:
+    '''
+    Finds the top 3 most common words associated with a negative sentiment title from all, 
+    left leaning, and right leaning media and saves to database.
+    '''
     tokenized_df = _tokenize_articles_df(classified_df)
     counter_df = _add_counter_df(tokenized_df)
 
@@ -98,7 +115,7 @@ def sentiment_classifier(classified_df: pd.DataFrame) -> None:
 
 
 def sentimentizer() -> None:
-    '''Gathers mean sentiment data from all, left leaning, and right leaning media and saves to database.'''
+    '''Gathers mean sentiment and word usages data and saves to database.'''
     parsed_dir_root = Path(Variable.get('base_dir')).joinpath('data/parsed')
     parsed_dir = add_datetime_to_path(parsed_dir_root, Variable.get('current_time'))
     classified_df = create_sentiment_df(parsed_dir)

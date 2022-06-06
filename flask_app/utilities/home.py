@@ -23,11 +23,11 @@ class Trend(TypedDict):
     all: str
 
 
-def get_second_latest_sentiment() -> None:
+def get_second_latest_sentiment() -> List[Sentiment]:
     '''
     Fetches most recent 2 sentiment data from database.
     Returns those rows as a list of dicts. 0 index being most recent.
-    Abort 404 if no records are returned fromd database.
+    Abort 404 if no records are returned from database.
     '''
     sql_rows = (
         get_db()
@@ -124,7 +124,11 @@ def get_trend(most_recent: float, second_recent: float) -> str:
         return "none"
 
 
-def get_unhappy_words():
+def get_unhappy_words() -> sqlite3.Row:
+    '''
+    Fetches most recent uunhappy words from database.
+    Abort 404 if no records are returned from database.
+    '''
     sql_row = (
         get_db()
         .execute(
@@ -136,5 +140,8 @@ def get_unhappy_words():
         )
         .fetchone()
     )
+
+    if sql_row is None:
+        abort(404, "No unhappy words record found!")
 
     return sql_row
