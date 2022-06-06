@@ -17,6 +17,7 @@ After cloning the repository, cd into /in_the_news:
 $ python3.9 -m venv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
+$ python3.9 -m nltk.downloader stopwords
 ```
 
 Set up airflow:
