@@ -61,23 +61,39 @@ def sql_row_to_sentiment(sql: sqlite3.Row) -> Sentiment:
             }    
 
 
-def get_moods_from_sentiment(sentiment: Sentiment) -> Mood:
+def get_moods_from_sentiment(sentiment: Sentiment, adjustment="normal") -> Mood:
     '''Creates and returns a dictionary with moods for each sentiment category.'''
-    right = get_mood_word(float_to_percent(sentiment['right_mean_sentiment']))
-    left = get_mood_word(float_to_percent(sentiment['left_mean_sentiment']))
-    all = get_mood_word(float_to_percent(sentiment['all_mean_sentiment']))
+    right = get_mood_word(float_to_percent(sentiment['right_mean_sentiment']), adjustment)
+    left = get_mood_word(float_to_percent(sentiment['left_mean_sentiment']), adjustment)
+    all = get_mood_word(float_to_percent(sentiment['all_mean_sentiment']), adjustment)
     return {'right': right, 'left': left, 'all': all}
 
+adjust = {
+    "normal": 0,
+    "left": 1,
+    "right": 2,
+    "all": 3
+}
 
-def get_mood_word(score: int) -> str:
-    '''Takes in a sentiment score from 100 to -100 and returns a text representationg of that score.'''
-    if score > 50:
+sentiment = {
+    "escstatic": [10,-2,-5,-4],
+    "up-beat": [2,-7,-11,-8],
+    "indifferent": [-2,-9,-15,-10],
+    "annoyed": [-10,-13,-20,-15]
+}
+
+def get_mood_word(score: int, adjustment: str) -> str:
+    '''
+    Takes in a sentiment score from 100 to -100 and returns a text representationg of that score.
+    Applies an adjustment to the score.
+    '''
+    if score > sentiment["escstatic"][adjust[adjustment]]:
         return "escstatic"
-    elif score > 5:
+    elif score > sentiment["up-beat"][adjust[adjustment]]:
         return "up-beat"
-    elif score > -5:
+    elif score > sentiment["indifferent"][adjust[adjustment]]:
         return "indifferent"
-    elif score > -50:
+    elif score > sentiment["annoyed"][adjust[adjustment]]:
         return "annoyed"
     else:
         return "seething"
