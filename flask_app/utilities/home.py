@@ -69,31 +69,36 @@ def get_moods_from_sentiment(sentiment: Sentiment, adjustment=False) -> Mood:
     print(right, left, all)
     return {'right': right, 'left': left, 'all': all}
 
+
+# represents adjusted sentiment scores
+sentiment = {
+    "ecstatic": [-2,-5,-4],
+    "up-beat": [-7,-11,-8],
+    "indifferent": [-9,-15,-10],
+    "annoyed": [-13,-20,-15]
+}
+
+
+# news_type key for sentiment dictionary
 adjust = {
     "left": 0,
     "right": 1,
     "all": 2
 }
 
-sentiment = {
-    "escstatic": [-2,-5,-4],
-    "up-beat": [-7,-11,-8],
-    "indifferent": [-9,-15,-10],
-    "annoyed": [-13,-20,-15]
-}
 
-def get_mood_word(score: int, type: str, adjustment=False) -> str:
+def get_mood_word(score: int, news_type: str, adjustment=False) -> str:
     '''
     Takes in a sentiment score from 100 to -100 and returns a text representationg of that score.
-    Applies an adjustment to the score.
+    May apply an adjustment to the score based on type.
     '''
-    if score > (sentiment["escstatic"][adjust[type]] if adjustment else 10):
-        return "escstatic"
-    elif score > (sentiment["up-beat"][adjust[type]] if adjustment else 2):
+    if score > (sentiment["ecstatic"][adjust[news_type]] if adjustment else 10):
+        return "ecstatic"
+    elif score > (sentiment["up-beat"][adjust[news_type]] if adjustment else 2):
         return "up-beat"
-    elif score > (sentiment["indifferent"][adjust[type]] if adjustment else -2):
+    elif score > (sentiment["indifferent"][adjust[news_type]] if adjustment else -2):
         return "indifferent"
-    elif score > (sentiment["annoyed"][adjust[type]] if adjustment else -10):
+    elif score > (sentiment["annoyed"][adjust[news_type]] if adjustment else -10):
         return "annoyed"
     else:
         return "seething"

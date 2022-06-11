@@ -11,8 +11,16 @@ def index():
     '''Creates the index route that displays sentiment data'''
     sentiments = get_second_latest_sentiment()
     moods = get_moods_from_sentiment(sentiments[0])
+    adjusted_moods = get_moods_from_sentiment(sentiments[0], True)
     perc_sentiment = float_dict_to_percent(sentiments[0])
     trend = get_sentiment_trend(sentiments)
     words = get_unhappy_words()
 
-    return render_template("sentiment/index.html", sentiment=perc_sentiment, moods=moods, trend=trend, words=words)
+    return render_template(
+                            "sentiment/index.html", 
+                            sentiment=perc_sentiment, 
+                            moods=moods, 
+                            adjusted_moods=adjusted_moods, 
+                            trend=trend, 
+                            words=words
+                        )
