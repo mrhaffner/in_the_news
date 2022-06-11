@@ -61,39 +61,39 @@ def sql_row_to_sentiment(sql: sqlite3.Row) -> Sentiment:
             }    
 
 
-def get_moods_from_sentiment(sentiment: Sentiment, adjustment="normal") -> Mood:
+def get_moods_from_sentiment(sentiment: Sentiment, adjustment=False) -> Mood:
     '''Creates and returns a dictionary with moods for each sentiment category.'''
-    right = get_mood_word(float_to_percent(sentiment['right_mean_sentiment']), adjustment)
-    left = get_mood_word(float_to_percent(sentiment['left_mean_sentiment']), adjustment)
-    all = get_mood_word(float_to_percent(sentiment['all_mean_sentiment']), adjustment)
+    right = get_mood_word(float_to_percent(sentiment['right_mean_sentiment']), "right", adjustment)
+    left = get_mood_word(float_to_percent(sentiment['left_mean_sentiment']), "left", adjustment)
+    all = get_mood_word(float_to_percent(sentiment['all_mean_sentiment']), "all", adjustment)
+    print(right, left, all)
     return {'right': right, 'left': left, 'all': all}
 
 adjust = {
-    "normal": 0,
-    "left": 1,
-    "right": 2,
-    "all": 3
+    "left": 0,
+    "right": 1,
+    "all": 2
 }
 
 sentiment = {
-    "escstatic": [10,-2,-5,-4],
-    "up-beat": [2,-7,-11,-8],
-    "indifferent": [-2,-9,-15,-10],
-    "annoyed": [-10,-13,-20,-15]
+    "escstatic": [-2,-5,-4],
+    "up-beat": [-7,-11,-8],
+    "indifferent": [-9,-15,-10],
+    "annoyed": [-13,-20,-15]
 }
 
-def get_mood_word(score: int, adjustment: str) -> str:
+def get_mood_word(score: int, type: str, adjustment=False) -> str:
     '''
     Takes in a sentiment score from 100 to -100 and returns a text representationg of that score.
     Applies an adjustment to the score.
     '''
-    if score > sentiment["escstatic"][adjust[adjustment]]:
+    if score > (sentiment["escstatic"][adjust[type]] if adjustment else 10):
         return "escstatic"
-    elif score > sentiment["up-beat"][adjust[adjustment]]:
+    elif score > (sentiment["up-beat"][adjust[type]] if adjustment else 2):
         return "up-beat"
-    elif score > sentiment["indifferent"][adjust[adjustment]]:
+    elif score > (sentiment["indifferent"][adjust[type]] if adjustment else -2):
         return "indifferent"
-    elif score > sentiment["annoyed"][adjust[adjustment]]:
+    elif score > (sentiment["annoyed"][adjust[type]] if adjustment else -10):
         return "annoyed"
     else:
         return "seething"
