@@ -2,13 +2,20 @@
 
 A simple ETL that gathers data hourly from news RSS feeds and analyzes sentiment.
 
-Visit the Mood-O-Meter to see the media's current mood (spoiler - it is never positive):
+Visit the Mood-O-Meter to see the media's current mood (spoiler - it is never positive) (not mobile optimized):
 
 https://moodometer.mattrhaffner.com/
 
 ![alt text](project_diagram.png)
 
-## Set Up
+## Purpose:
+
+- Practice writing Python with proper documentation, comments, and type hints
+- Learn about Apache Airflow for orchestrating data pipelines
+- Explore the Pandas library
+- Practice writing custom SQL
+
+## Set Up:
 
 Requires python 3.9, pip, venv, and sqlite3.
 After cloning the repository, cd into /in_the_news:
@@ -20,7 +27,7 @@ $ pip install -r requirements.txt
 $ python3.9 -m nltk.downloader stopwords
 ```
 
-Set up airflow:
+Set up Airflow:
 
 ```sh
 $ airflow db init
@@ -90,7 +97,7 @@ $ flask run
 
 Visit the flask app in your web browser at http://localhost:5000
 
-## Deployment
+## Deployment:
 
 I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
 
@@ -99,8 +106,13 @@ https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
 
 Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
 
-## Configuration
+## Configuration:
 
 The RSS feeds to be scraped are found in /dags/scripts/config/news_sites.csv
 
 It is possible to add more RSS feeds to this file. I suggest adding an equal number of right and left leaning websites. It is possible that additional RSS feeds will not be parsed properly - make sure to check the data saved to the .parquet files to ensure they are compatible.
+
+## Potential improvements:
+
+- More tests!
+- Mobile optimization
