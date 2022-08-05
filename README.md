@@ -116,3 +116,4 @@ It is possible to add more RSS feeds to this file. I suggest adding an equal num
 
 - More tests!
 - Mobile optimization
+- A way to filter / remove irrelevant words from the "unhappy words feed"
