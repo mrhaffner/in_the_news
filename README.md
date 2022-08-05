@@ -11,9 +11,10 @@ https://moodometer.mattrhaffner.com/
 ## Purpose:
 
 - Practice writing Python with proper documentation, comments, and type hints
-- Learn about Apache Airflow for orchestrating data pipelines
-- Explore the Pandas library
+- Learn about using Apache Airflow for orchestrating data pipelines
+- Explore the Pandas library for data manipulation
 - Practice writing custom SQL
+- Gain experience deploying a project on a linux server
 
 ## Set Up:
 
