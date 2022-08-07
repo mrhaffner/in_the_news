@@ -100,12 +100,15 @@ Visit the flask app in your web browser at http://localhost:5000
 
 ## Deployment:
 
-I deployed my project to the lowest tier DigitalOcean droplet running on Ubuntu 20.04. This tier has 1 GB of memory which barely cuts it for everything to run. For instance, I had set up airflow with the webserver running, and there was not enough memory to install some of the packages for the flask app. (Note there is now a lower tier of droplet with even less memory)
+I deployed my project to the lowest tier Digital Ocean droplet running on Ubuntu 20.04. This tier has 1 GB of working memory (Update: there is now a 
+lower tier of droplet with even less memory). More working memory would improve this project.  It is not possible to concurrently run Airflow, the 
+Airflow web interface, and the project's webview (you may use one web interface with Airflow running). It is also not possible to run Airflow, the 
+webview and concurrent DAGs.
 
-I followed these instructions to set up a NGINX and uWSGI server to run the flask app in production (you will need to use python 3.9):
+I followed these instructions to set up a NGINX and uWSGI server to run the Flask app in production (you will need to use Python 3.9):
 https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
 
-Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production flask app.
+Note that flaskapp.py and wsgi.py in the root directory serve as entry points for the production Flask app.
 
 ## Configuration:
 
