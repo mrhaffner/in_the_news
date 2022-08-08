@@ -47,7 +47,7 @@ $ nano ~/airflow/airflow.cfg
 dags_folder = path/to/project/in_the_news/dags
 ```
 
-You may also want to update load_examples property to hide the 30 example DAGS in webserver UI (found in first section: [core]):
+You may also want to update load_examples property to hide the 30 example DAGS in the webserver UI (found in first section: [core]):
 
 ```sh
 load_examples = False
@@ -81,6 +81,13 @@ $ airflow webserver -D
 ```
 
 Visit http://localhost:8080 in your web browser and login to use the UI and start the DAG.
+
+If the scheduler decides to stop working in daemon mode after activation, cd into your airflow home folder and run:
+
+```sh
+$ sudo rm airflow-scheduler.err airflow-scheduler.pid
+$ airflow scheduler -D
+```
 
 Run the tests:
 
