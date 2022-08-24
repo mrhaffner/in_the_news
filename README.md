@@ -112,7 +112,7 @@ lower tier of droplet with even less memory). More working memory would improve 
 Airflow web interface, and the project's webview (you may use one web interface with Airflow running). It is also not possible to run Airflow, the 
 webview and concurrent DAGs.
 
-Update: The ETL ran smoothly for a few months.  After a fair amount of debugging, it seems that the 1GB of working memory is not always adequate anymore.  This will cause the ETL to fail.  Results will become stale without manually adjusting the ETL to skip a run that failed due to lack of memory.
+Update: The ETL ran smoothly for a few months. After a fair amount of debugging, it seems that the 1GB of working memory is not always adequate anymore. This will cause the ETL to fail. Results will become stale without manually adjusting the ETL to skip a run that failed due to lack of memory. A simpler fix is just to pay for more working memory.  This was a project for learning, so I am likely to soon discontinue the live page rather than do continual manual adjustments or pay for a higher tier droplet.
 
 I followed these instructions to set up a NGINX and uWSGI server to run the Flask app in production (you will need to use Python 3.9):
 https://pythonforundergradengineers.com/flask-app-on-digital-ocean.html
