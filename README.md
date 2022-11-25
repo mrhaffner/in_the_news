@@ -2,9 +2,11 @@
 
 A simple ETL that gathers data hourly from news RSS feeds and analyzes sentiment.
 
-Visit the Mood-O-Meter to see the media's current mood (spoiler - it is never positive) (not mobile optimized):
+~~Visit the Mood-O-Meter to see the media's current mood (spoiler - it is never positive) (not mobile optimized):~~
 
-https://moodometer.mattrhaffner.com/
+~~https://moodometer.mattrhaffner.com/~~
+
+The project is no longer live!
 
 ![alt text](project_diagram.png)
 
